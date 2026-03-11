@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+# Optional: keep major AI/search crawlers allowed explicitly.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://markdstudio.netlify.app/sitemap.xml
