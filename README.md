@@ -1,33 +1,34 @@
 # MarkdStudio
 
-MarkdStudio is a modern, serverless Markdown editor focused on fast writing, high-quality preview, and practical export workflows.
+MarkdStudio is a static, serverless Markdown writing studio built for fast drafting, polished preview, and practical export workflows.
 
-## Highlights
+## What You Get
 
-- Live Markdown preview with elegant typography
-- Multiple document themes and light/dark/system appearance
-- Write, Split, Preview, and Inline visual editing modes
-- Code editor capabilities powered by CodeMirror:
+- Four editing modes: `Split`, `Write`, `Preview`, and `Inline`.
+- Code-editor workflow in write mode via CodeMirror 5:
   - Syntax highlighting
   - Line numbers
-  - Bracket matching and auto-closing pairs
-  - Find and replace (regex support)
+  - Bracket matching and auto-close
+  - Find/replace with regex support
   - Multi-cursor support
-- Advanced markdown rendering:
+- Rich Markdown rendering:
   - Mermaid diagrams
   - KaTeX math
   - Callouts
   - Footnotes
-  - Emoji shortcodes
+  - Task lists, tables, and emoji shortcodes
+- Multi-document tabs with unsaved-change indicators.
+- Dynamic Table of Contents with heading tracking.
 - Export options:
   - HTML
-  - PDF (with margin/orientation/paper options)
+  - PDF (margin, orientation, paper format)
   - Print
-  - Embeddable HTML snippet
+  - Embed HTML snippet
+  - Markdown download
 
 ## Tech Stack
 
-- Plain HTML, CSS, JavaScript
+- HTML, CSS, and vanilla JavaScript
 - marked.js
 - highlight.js
 - DOMPurify
@@ -36,61 +37,52 @@ MarkdStudio is a modern, serverless Markdown editor focused on fast writing, hig
 - CodeMirror 5
 - html2pdf.js
 
-## Project Structure
+## Project Files
 
-- app.js: Main application logic
-- styles.css: Application styles
-- index.html: UI shell and CDN dependencies
-- skill.md: Skill file for content generation rules
-- PRD.md: Product requirements document
+- `index.html` - App shell and CDN dependency includes
+- `styles.css` - App styling and theme rules
+- `app.js` - Core app logic (editor, preview, TOC, tabs, export)
+- `PRD.md` - Product requirements
+- `REFERENCE.md` - Markdown syntax reference
+- `EXAMPLES.md` - Ready-to-use content examples
+- `TEMPLATES.md` - Reusable writing templates
 
-## Running Locally
 
-1. Open the project with a static server (recommended).
-2. Open index.html in your browser.
-
-Notes:
-- Most features work directly in static hosting (for example GitHub Pages).
-- Some browser APIs (file handling behavior) vary by browser and local file mode.
-
-## Keyboard Shortcuts (Core)
+## Keyboard Shortcuts
 
 Global:
-- Ctrl/Cmd+S: Save to disk
-- Ctrl/Cmd+O: Open file
-- Ctrl/Cmd+N: New document
+
+- `Ctrl/Cmd+S` Save to disk
+- `Ctrl/Cmd+O` Open file
+- `Ctrl/Cmd+N` New document
 
 Code editor:
-- Ctrl/Cmd+F: Find
-- Ctrl+H: Replace
-- Cmd+Alt+F: Replace (macOS)
-- Ctrl/Cmd+G: Next match
-- Shift+Ctrl/Cmd+G: Previous match
-- Ctrl/Cmd+/: Toggle comment
-- Tab: Indent
-- Shift+Tab: Outdent
 
-Markdown formatting:
-- Ctrl/Cmd+B: Bold
-- Ctrl/Cmd+I: Italic
-- Ctrl/Cmd+K: Link
-- Ctrl/Cmd+`: Inline code
-- Ctrl/Cmd+~: Strikethrough
-- Ctrl/Cmd+': Blockquote
+- `Ctrl/Cmd+F` Find
+- `Ctrl+H` Replace
+- `Cmd+Alt+F` Replace (macOS)
+- `Ctrl/Cmd+G` Next match
+- `Shift+Ctrl/Cmd+G` Previous match
+- `Ctrl/Cmd+/` Toggle comment
 
-Inline visual editor:
-- Ctrl/Cmd+B: Bold
-- Ctrl/Cmd+I: Italic
-- Ctrl/Cmd+K: Link
-- Ctrl/Cmd+Shift+7: Numbered list
-- Ctrl/Cmd+Shift+8: Bulleted list
+Formatting:
 
-## Roadmap
+- `Ctrl/Cmd+B` Bold
+- `Ctrl/Cmd+I` Italic
+- `Ctrl/Cmd+K` Link
 
-- Developer information section (to be added once details are provided)
-- Additional inline editor feature parity with full markdown capabilities
-- More export customization templates
+## Documentation
+
+- See `PRD.md` for product scope and requirements.
+- See `REFERENCE.md` for supported Markdown syntax.
+- See `EXAMPLES.md` for sample documents.
+- See `TEMPLATES.md` for reusable structures.
+
+## Notes
+
+- MarkdStudio is designed to run on static hosting (including GitHub Pages).
+- File handling behavior can vary slightly by browser and security context.
 
 ## License
 
-Use and modify freely for personal and commercial workflows.
+See `LICENSE`.
