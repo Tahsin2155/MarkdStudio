@@ -1,367 +1,874 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="github" data-appearance="light">
+<html lang="en" data-appearance="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MarkdStudio - Modern Markdown Editor</title>
-        <meta name="description" content="MarkdStudio is a modern Markdown editor with live preview, themes, code editor features, Mermaid, KaTeX, and export options including PDF.">
-        <meta name="keywords" content="markdown editor, markdown preview, markdown pdf export, mermaid markdown, katex markdown, online markdown tool">
-        <meta name="author" content="MarkdStudio">
-        <meta name="robots" content="index, follow, max-image-preview:large">
-        <meta name="theme-color" content="#0969da">
-        <link rel="canonical" href="./">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="MarkdStudio - Modern Markdown Editor">
-        <meta property="og:description" content="Write, preview, and export Markdown beautifully with advanced editing features.">
-        <meta property="og:url" content="./">
-        <meta property="og:site_name" content="MarkdStudio">
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:title" content="MarkdStudio - Modern Markdown Editor">
-        <meta property="twitter:description" content="A fast Markdown editor for technical writing, docs, and publishing workflows.">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%230969da' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E">
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "MarkdStudio",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Web",
-            "description": "A web-based Markdown editor with live preview, code editor capabilities, and export workflows.",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            }
-        }
-        </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarkdStudio — Markdown Writing Studio</title>
+  <meta name="description" content="MarkdStudio is a fast, browser-based Markdown editor with live preview, Mermaid diagrams, KaTeX math, and PDF export." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#0969da" />
+  <link rel="canonical" href="https://markdstudio.netlify.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MarkdStudio — Markdown Writing Studio" />
+  <meta property="og:description" content="A fast Markdown editor with live preview, Mermaid diagrams, KaTeX math, and export options." />
+  <meta property="og:url" content="https://markdstudio.netlify.app/" />
+  <meta property="og:site_name" content="MarkdStudio" />
+  <meta property="og:image" content="https://markdstudio.netlify.app/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MarkdStudio landing page preview" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MarkdStudio — Markdown Writing Studio" />
+  <meta name="twitter:description" content="Write, preview, and export Markdown in one focused browser workspace." />
+  <meta name="twitter:image" content="https://markdstudio.netlify.app/og-image.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MarkdStudio",
+    "url": "https://markdstudio.netlify.app/",
+    "description": "A fast, browser-based Markdown editor with live preview, Mermaid diagrams, KaTeX math, and PDF export.",
+    "potentialAction": {
+      "@type": "ViewAction",
+      "name": "Open App",
+      "target": "https://markdstudio.netlify.app/app/"
+    }
+  }
+  </script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%230969da' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <!-- Highlight.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme">
+  <style>
+    :root {
+      --blue:      #0969da;
+      --blue-dim:  #ddf4ff;
+      --blue-mid:  #0860c4;
+      --ink:       #1f2328;
+      --ink-2:     #656d76;
+      --surface:   #ffffff;
+      --surface-2: #f6f8fa;
+      --surface-3: #eaeef2;
+      --border:    #d0d7de;
+      --border-2:  #afb8c1;
+      --shadow-sm: 0 1px 3px rgba(31,35,40,.08);
+      --shadow-md: 0 4px 16px rgba(31,35,40,.10);
+      --shadow-lg: 0 12px 48px rgba(31,35,40,.14);
+      --r:         8px;
+      --font-ui:   'Outfit', sans-serif;
+      --font-body: 'Source Serif 4', Georgia, serif;
+      --font-code: 'JetBrains Mono', monospace;
+    }
 
-    <!-- KaTeX -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    html[data-appearance="dark"] {
+      --blue:      #58a6ff;
+      --blue-dim:  #12263e;
+      --blue-mid:  #3f95ff;
+      --ink:       #e6edf3;
+      --ink-2:     #9aa8b5;
+      --surface:   #0d1117;
+      --surface-2: #161b22;
+      --surface-3: #21262d;
+      --border:    #30363d;
+      --border-2:  #484f58;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.35);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.4);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,.45);
+    }
 
-    <!-- CodeMirror 5 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+    html[data-appearance="dark"] nav {
+      background: rgba(13,17,23,.85);
+    }
+    html[data-appearance="dark"] .appearance-btn.is-active {
+      background: rgba(88,166,255,.15);
+      box-shadow: inset 0 0 0 1px rgba(88,166,255,.3);
+      color: var(--ink);
+    }
+    html[data-appearance="dark"] .af-mode.active {
+      background: rgba(88,166,255,.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,.2), inset 0 0 0 1px rgba(88,166,255,.3);
+      color: var(--ink);
+    }
 
-    <!-- App Styles -->
-    <link rel="stylesheet" href="styles.css">
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-ui);
+      background: var(--surface);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 2rem; }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+
+    section[id] {
+      scroll-margin-top: 72px;
+    }
+
+    .label {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-family: var(--font-code); font-size: .68rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--blue);
+      background: var(--blue-dim); border: 1px solid rgba(9,105,218,.18);
+      padding: .28rem .7rem; border-radius: 20px;
+    }
+    .label::before { content: '●'; font-size: .45rem; animation: blink 2s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 52px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .nav-inner {
+      max-width: 1140px; margin: 0 auto; padding: 0 2rem;
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: .55rem;
+      font-weight: 700; font-size: 1.05rem;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-logo svg { color: var(--blue); flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
+    .nav-links a { font-size: .875rem; font-weight: 400; color: var(--ink-2); text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-actions { display: flex; align-items: center; gap: .55rem; }
+    .appearance-sw {
+      display: inline-flex; align-items: center; gap: 2px;
+      background: var(--surface-2); padding: 3px;
+      border-radius: var(--r); border: 1px solid var(--border);
+    }
+    .appearance-btn {
+      border: 0; background: transparent; color: var(--ink-2);
+      padding: 4px 8px; border-radius: 6px; font-size: .74rem; font-weight: 600;
+      font-family: var(--font-ui); cursor: pointer;
+    }
+    .appearance-btn.is-active {
+      background: rgba(221,244,255,.55);
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px rgba(9,105,218,.25);
+    }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--blue); color: #fff;
+      padding: .45rem 1.1rem; border-radius: var(--r);
+      font-size: .84rem; font-weight: 600;
+      text-decoration: none; transition: background .15s, transform .12s;
+    }
+    .nav-cta:hover { background: var(--blue-mid); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      padding: 7.5rem 2rem 5rem;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(9,105,218,.07) 0%, transparent 60%),
+        var(--surface);
+    }
+    .hero-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.1fr; align-items: start; gap: 5rem;
+    }
+    .hero-text { opacity: 0; transform: translateY(20px); animation: fadeUp .7s ease forwards .1s; padding-top: 1rem; }
+    .hero-visual { opacity: 0; transform: translateY(16px); animation: fadeUp .8s ease forwards .3s; }
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 4vw, 3.5rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -.03em; color: var(--ink);
+      margin: 1rem 0 1.3rem;
+    }
+    .hero-title .accent { color: var(--blue); }
+
+    .hero-sub {
+      font-family: var(--font-body); font-size: 1.1rem; color: var(--ink-2);
+      line-height: 1.75; max-width: 44ch; margin-bottom: 2rem;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--blue); color: #fff; padding: .7rem 1.5rem; border-radius: var(--r);
+      font-size: .93rem; font-weight: 600; text-decoration: none;
+      transition: background .15s, transform .12s;
+    }
+    .btn-primary:hover { background: var(--blue-mid); transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .4rem;
+      color: var(--ink); font-size: .875rem; font-weight: 500;
+      text-decoration: none; border: 1px solid var(--border);
+      padding: .68rem 1.2rem; border-radius: var(--r);
+      transition: border-color .15s, background .15s;
+    }
+    .btn-ghost:hover { border-color: var(--border-2); background: var(--surface-2); }
+
+    .hero-badges { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+    .badge { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--ink-2); }
+    .badge svg { color: var(--blue); flex-shrink: 0; }
+
+    /* APP FRAME MOCKUP */
+    .app-frame {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-lg);
+      font-family: var(--font-code); font-size: 12px;
+    }
+    .af-header {
+      height: 48px; padding: 0 12px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .af-logo { display: flex; align-items: center; gap: 6px; font-family: var(--font-ui); font-weight: 600; font-size: 13px; color: var(--ink); }
+    .af-logo svg { color: var(--blue); }
+    .af-mode-sw {
+      display: flex; align-items: center; gap: 2px;
+      background: var(--surface-2); padding: 3px; border-radius: 8px; border: 1px solid var(--border);
+    }
+    .af-mode { padding: 4px 10px; border-radius: 6px; font-family: var(--font-ui); font-size: 11px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
+    .af-mode.active {
+      background: rgba(221,244,255,.55); color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0,0,0,.06), inset 0 0 0 1px rgba(9,105,218,.25);
+    }
+    .af-pills { display: flex; gap: 6px; }
+    .af-pill { padding: 4px 10px; border: 1px solid var(--border); border-radius: 7px; font-family: var(--font-ui); font-size: 11px; font-weight: 500; color: var(--ink-2); }
+    .af-tabs {
+      height: 36px; background: var(--surface-2); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 4px; gap: 2px;
+    }
+    .af-tab {
+      height: 30px; padding: 0 12px; border-radius: 8px 8px 0 0;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: var(--ink);
+      background: var(--surface); border-bottom: 2px solid var(--blue);
+    }
+    .af-tab-x { opacity: .5; font-size: 14px; }
+    .af-body { display: grid; grid-template-columns: 1fr 1px 1fr 200px; height: 300px; }
+    .af-editor { padding: 14px 18px; background: var(--surface); overflow: hidden; line-height: 1.7; }
+    .af-divider { background: var(--border); }
+    .af-preview { padding: 14px 18px; background: var(--surface); overflow: hidden; font-family: var(--font-body); font-size: 12.5px; line-height: 1.65; }
+    .af-toc { border-left: 1px solid var(--border); background: var(--surface-2); padding: 10px 0; overflow: hidden; }
+    .af-toc-head { font-family: var(--font-ui); font-size: 10px; font-weight: 600; color: var(--ink-2); text-transform: uppercase; letter-spacing: .5px; padding: 0 12px 8px; border-bottom: 1px solid var(--border); }
+    .toc-row { padding: 5px 12px; font-family: var(--font-ui); font-size: 11px; color: var(--ink-2); white-space: nowrap; }
+    .toc-row.active { color: var(--blue); border-left: 2px solid var(--blue); padding-left: 10px; font-weight: 500; }
+    .toc-row.l2 { padding-left: 22px; font-size: 10.5px; }
+    .toc-row.l2.active { padding-left: 20px; }
+    .t-h1 { color: #1f6feb; font-weight: 700; }
+    .t-h2 { color: #1f6feb; font-weight: 600; }
+    .t-muted { color: #8b949e; }
+    .t-bullet { color: #bf8700; }
+    .t-code { color: #0550ae; background: rgba(13,17,23,.05); padding: 0 3px; border-radius: 3px; }
+    .t-bold { color: #cf222e; font-weight: 700; }
+    .t-italic { color: #b06f00; font-style: italic; }
+    .t-link { color: #0a7ea4; text-decoration: underline; }
+    .t-math { color: #8250df; }
+
+    html[data-appearance="dark"] .t-h1,
+    html[data-appearance="dark"] .t-h2 { color: #79c0ff; }
+    html[data-appearance="dark"] .t-bullet { color: #e3b341; }
+    html[data-appearance="dark"] .t-code { color: #79c0ff; background: rgba(255,255,255,.06); }
+    html[data-appearance="dark"] .t-bold { color: #ff7b72; }
+    html[data-appearance="dark"] .t-italic { color: #e3b341; }
+    html[data-appearance="dark"] .t-link { color: #58a6ff; }
+    html[data-appearance="dark"] .t-math { color: #d2a8ff; }
+    html[data-appearance="dark"] .pv-math { color: #d2a8ff; }
+    .ed-line { white-space: pre; overflow: hidden; }
+    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--blue); vertical-align: text-bottom; animation: cur 1.1s step-end infinite; }
+    @keyframes cur { 0%,100%{opacity:1} 50%{opacity:0} }
+    .pv-h1 { font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: .3rem; padding-bottom: .2rem; border-bottom: 1px solid var(--border); }
+    .pv-h2 { font-size: .96rem; font-weight: 600; color: var(--ink); margin: .7rem 0 .2rem; }
+    .pv-p { color: var(--ink-2); line-height: 1.6; font-size: .85rem; margin-bottom: .25rem; }
+    .pv-li { color: var(--ink-2); font-size: .83rem; line-height: 1.7; padding-left: 1rem; position: relative; }
+    .pv-li::before { content: '•'; position: absolute; left: 0; color: var(--blue); }
+    .pv-callout { background: var(--blue-dim); border-left: 3px solid var(--blue); border-radius: 6px; padding: 7px 10px; margin: .5rem 0; font-size: .8rem; }
+    .pv-callout-title { font-weight: 600; color: var(--blue); font-size: .76rem; margin-bottom: 2px; }
+    .pv-math { color: #8250df; font-family: var(--font-code); font-size: .78rem; margin: .3rem 0; }
+    .af-statusbar {
+      height: 24px; background: var(--surface-2); border-top: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 12px;
+      font-family: var(--font-ui); font-size: 10.5px; color: var(--ink-2); gap: 1rem;
+    }
+    .af-statusbar .sep { color: var(--border-2); }
+
+    /* STRIP */
+    .strip { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; }
+    .strip-inner { max-width: 1140px; margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2rem; }
+    .strip-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; color: var(--ink-2); }
+    .strip-item svg { color: var(--blue); flex-shrink: 0; }
+
+    /* SECTIONS */
+    .features { padding: 6rem 2rem; }
+    .modes-section { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 2rem; }
+    .syntax-section { padding: 6rem 2rem; }
+    .export-section { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 2rem; }
+
+    .section-head { text-align: center; max-width: 580px; margin: 0 auto 3.5rem; }
+    .section-head h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; color: var(--ink); margin: .8rem 0; }
+    .section-head p { font-family: var(--font-body); font-size: 1rem; color: var(--ink-2); line-height: 1.7; }
+
+    /* FEATURES GRID */
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .feat-card { background: var(--surface); padding: 1.8rem 1.6rem; transition: background .15s; }
+    .feat-card:hover { background: var(--surface-2); }
+    .feat-icon { width: 2.2rem; height: 2.2rem; background: var(--blue-dim); border: 1px solid rgba(9,105,218,.2); border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; color: var(--blue); }
+    .feat-title { font-weight: 700; font-size: .97rem; margin-bottom: .45rem; }
+    .feat-desc { font-family: var(--font-body); font-size: .875rem; color: var(--ink-2); line-height: 1.65; }
+
+    /* MODES */
+    .modes-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.2rem; }
+    .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1.4rem; transition: border-color .15s, box-shadow .15s; }
+    .mode-card:hover { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
+    .mode-number { font-family: var(--font-code); font-size: .7rem; font-weight: 500; color: var(--blue); margin-bottom: .6rem; }
+    .mode-name { font-weight: 700; font-size: 1rem; margin-bottom: .4rem; }
+    .mode-desc { font-family: var(--font-body); font-size: .85rem; color: var(--ink-2); line-height: 1.6; }
+
+    /* SYNTAX */
+    .syntax-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; margin-top: 3rem; }
+    .syntax-desc h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: .7rem; }
+    .syntax-desc p { font-family: var(--font-body); font-size: .97rem; color: var(--ink-2); line-height: 1.7; margin-bottom: 1rem; }
+    .syntax-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip { padding: .28rem .75rem; border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-code); font-size: .72rem; color: var(--ink-2); }
+    .code-block-dark { background: #0d1117; border-radius: var(--r); overflow: hidden; border: 1px solid #30363d; }
+    .code-header-dark { background: #161b22; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; font-family: var(--font-code); font-size: 11px; color: #8b949e; }
+    .code-body-dark { padding: 14px; font-family: var(--font-code); font-size: 12.5px; line-height: 1.9; color: #e6edf3; }
+    .dk-h { color: #79c0ff; font-weight: 600; }
+    .dk-bullet { color: #e3b341; }
+    .dk-muted { color: #8b949e; }
+    .dk-math { color: #d2a8ff; }
+    .dk-link { color: #58a6ff; text-decoration: underline; }
+    .dk-callout { color: #7ee787; }
+    .dk-task { color: #e3b341; }
+
+    /* EXPORT */
+    .export-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-top: 3rem; }
+    .export-card { background: var(--surface); padding: 1.6rem; transition: background .15s; }
+    .export-card:hover { background: var(--surface-2); }
+    .export-card-icon { font-size: 1.4rem; margin-bottom: .7rem; }
+    .export-card-title { font-weight: 700; font-size: .97rem; margin-bottom: .35rem; }
+    .export-card-desc { font-family: var(--font-body); font-size: .86rem; color: var(--ink-2); line-height: 1.6; }
+
+    /* CTA */
+    .cta-section { background: #1f2328; padding: 7rem 2rem; text-align: center; }
+    html[data-appearance="dark"] .cta-section { background: #161b22; }
+    .cta-section .label { background: rgba(9,105,218,.2); border-color: rgba(9,105,218,.35); color: #79c0ff; }
+    .cta-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #ffffff; letter-spacing: -.03em; line-height: 1.15; margin: 1rem 0 1.2rem; }
+    .cta-sub { font-family: var(--font-body); font-size: 1rem; color: rgba(255,255,255,.55); max-width: 46ch; margin: 0 auto 2.5rem; line-height: 1.7; }
+
+    .btn-white { display: inline-flex; align-items: center; gap: .4rem; background: #fff; color: #1f2328; padding: .7rem 1.5rem; border-radius: var(--r); font-family: var(--font-ui); font-size: .9rem; font-weight: 600; border: none; cursor: pointer; transition: background .15s, transform .12s; }
+    .btn-white:hover { background: #f0f6ff; transform: translateY(-1px); }
+    .cta-note { font-family: var(--font-code); font-size: .72rem; color: rgba(255,255,255,.3); letter-spacing: .05em; }
+
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+
+    /* FOOTER */
+    footer { padding: 2rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .95rem; color: var(--ink); }
+    .footer-logo svg { color: var(--blue); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: .82rem; color: var(--ink-2); text-decoration: none; transition: color .15s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: .78rem; color: var(--ink-2); font-family: var(--font-code); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-visual { order: -1; }
+      .features-grid { grid-template-columns: repeat(2,1fr); }
+      .modes-grid { grid-template-columns: repeat(2,1fr); }
+      .syntax-layout { grid-template-columns: 1fr; }
+      .af-toc { display: none; }
+      .af-body { grid-template-columns: 1fr 1px 1fr; }
+      .af-pills { display: none; }
+    }
+    @media (max-width: 640px) {
+      nav .nav-links { display: none; }
+      .nav-actions { flex: 1; justify-content: flex-end; gap: .4rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .modes-grid { grid-template-columns: 1fr; }
+      .export-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 5.5rem; }
+      footer { flex-direction: column; align-items: center; text-align: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; }
+    }
+    @media (max-width: 480px) {
+      .appearance-btn { padding: 4px 5px; font-size: .7rem; }
+      .nav-cta { padding: .4rem .85rem; font-size: .8rem; }
+      .strip-inner { gap: 1.2rem; }
+      .strip-item { font-size: .78rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        var m = localStorage.getItem('ms-landing-appearance') || 'system';
+        document.documentElement.setAttribute('data-appearance',
+          m === 'system' ? (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light') : m
+        );
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
-    <div id="app">
-        <!-- ===== Header ===== -->
-        <header id="app-header">
-            <div class="header-left">
-                <button id="sidebar-toggle" class="icon-btn" title="Open Menu" aria-label="Open navigation menu">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-                </button>
-                <div class="logo">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    <span>MarkdStudio</span>
-                </div>
-            </div>
 
-            <div class="header-center">
-                <div class="mode-switcher">
-                    <button class="mode-btn active" data-mode="split" title="Split View">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-                        <span>Split</span>
-                    </button>
-                    <button class="mode-btn" data-mode="write" title="Write Mode">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                        <span>Write</span>
-                    </button>
-                    <button class="mode-btn" data-mode="preview" title="Preview Mode">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <span>Preview</span>
-                    </button>
-                    <button class="mode-btn" data-mode="inline" title="Inline Mode">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                        <span>Inline</span>
-                    </button>
-                </div>
-            </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/" aria-label="MarkdStudio home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+      </svg>
+      MarkdStudio
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#modes">Modes</a></li>
+      <li><a href="#syntax">Syntax</a></li>
+      <li><a href="#export">Export</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="appearance-sw" role="group" aria-label="Appearance mode">
+        <button class="appearance-btn is-active" type="button" data-appearance="light" aria-pressed="true">Light</button>
+        <button class="appearance-btn" type="button" data-appearance="dark" aria-pressed="false">Dark</button>
+        <button class="appearance-btn" type="button" data-appearance="system" aria-pressed="false">System</button>
+      </div>
+      <a class="nav-cta" href="/app/">
+        Open App
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
 
-            <div class="header-right">
-                <button id="sync-scroll-btn" class="icon-btn active" title="Toggle Sync Scroll" aria-label="Toggle synchronized scrolling">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                </button>
-
-                <!-- Appearance Toggle (Light/Dark/System) -->
-                <div class="dropdown">
-                    <button class="toolbar-btn" id="appearance-toggle" data-dropdown="appearance-menu" title="Appearance">
-                        <svg class="icon-light" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                        <svg class="icon-dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                        <svg class="icon-system" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                    </button>
-                    <div class="dropdown-menu" id="appearance-menu">
-                        <button class="dropdown-item active" data-appearance="light">Light</button>
-                        <button class="dropdown-item" data-appearance="dark">Dark</button>
-                        <button class="dropdown-item" data-appearance="system">System</button>
-                    </div>
-                </div>
-
-                <!-- Theme Dropdown -->
-                <div class="dropdown">
-                    <button class="toolbar-btn" data-dropdown="theme-menu">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                        <span>Theme</span>
-                    </button>
-                    <div class="dropdown-menu" id="theme-menu">
-                        <button class="dropdown-item active" data-theme="github">GitHub</button>
-                        <button class="dropdown-item" data-theme="documentation">Documentation</button>
-                        <button class="dropdown-item" data-theme="blog">Blog</button>
-                        <button class="dropdown-item" data-theme="minimal">Minimal</button>
-                        <button class="dropdown-item" data-theme="academic">Academic</button>
-                    </div>
-                </div>
-
-                <!-- Typography Dropdown -->
-                <div class="dropdown">
-                    <button class="toolbar-btn" data-dropdown="typography-panel">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-                        <span>Type</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-panel" id="typography-panel">
-                        <div class="panel-group">
-                            <label for="font-family-select">Font Family</label>
-                            <select id="font-family-select">
-                                <option value="">Theme Default</option>
-                                <option value="'Inter', sans-serif">Inter</option>
-                                <option value="'Merriweather', serif">Merriweather</option>
-                                <option value="'Lora', serif">Lora</option>
-                                <option value="Georgia, serif">Georgia</option>
-                                <option value="system-ui, sans-serif">System</option>
-                            </select>
-                        </div>
-                        <div class="panel-group">
-                            <label>Font Size: <span id="font-size-val">16px</span></label>
-                            <input type="range" id="font-size-range" min="12" max="24" value="16" step="1">
-                        </div>
-                        <div class="panel-group">
-                            <label>Line Height: <span id="line-height-val">1.6</span></label>
-                            <input type="range" id="line-height-range" min="1.2" max="2.4" value="1.6" step="0.1">
-                        </div>
-                        <div class="panel-group">
-                            <label>Max Width: <span id="max-width-val">900px</span></label>
-                            <input type="range" id="max-width-range" min="600" max="1400" value="900" step="50">
-                        </div>
-                        <div class="panel-group">
-                            <button id="typography-reset" class="panel-btn">Reset to Defaults</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- File Dropdown -->
-                <div class="dropdown">
-                    <button class="toolbar-btn" data-dropdown="file-menu">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
-                        <span>File</span>
-                    </button>
-                    <div class="dropdown-menu" id="file-menu">
-                        <button class="dropdown-item" id="new-doc-btn">New Document</button>
-                        <button class="dropdown-item" id="open-file-btn">Open File…</button>
-                        <button class="dropdown-item" id="save-file-btn">Save to Disk</button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" id="upload-file-btn">Upload .md</button>
-                        <button class="dropdown-item" id="download-md-btn">Download .md</button>
-                    </div>
-                </div>
-
-                <!-- Export Dropdown -->
-                <div class="dropdown">
-                    <button class="toolbar-btn" data-dropdown="export-menu">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        <span>Export</span>
-                    </button>
-                    <div class="dropdown-menu" id="export-menu">
-                        <button class="dropdown-item" data-export="html">Export HTML</button>
-                        <button class="dropdown-item" data-export="pdf">Export PDF</button>
-                        <button class="dropdown-item" data-export="print">Print</button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" data-export="embed">Embed HTML Snippet</button>
-                        <button class="dropdown-item" data-export="md">Download Markdown</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- ===== Tab Bar ===== -->
-        <div id="tab-bar">
-            <div id="tabs-group">
-                <div id="tabs-container"></div>
-                <button id="new-tab-btn" title="New Document" aria-label="Create new document tab">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                </button>
-            </div>
-            <div id="tab-bar-right">
-                <div id="doc-stats" aria-live="polite">0 words · 0 chars</div>
-                <button id="toc-toggle-btn" class="icon-btn sm" title="Toggle Table of Contents" aria-label="Toggle table of contents panel">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                </button>
-            </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="label">browser-based · free · no setup</div>
+      <h1 class="hero-title">Your focused<br><span class="accent">Markdown</span><br>writing studio</h1>
+      <p class="hero-sub">
+        MarkdStudio combines a professional code editor, polished live preview, and export-ready output in one fast, serverless workspace. KaTeX math, Mermaid diagrams, callouts — all included.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="/app/">
+          Open MarkdStudio
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn-ghost" href="#features">See features</a>
+      </div>
+      <div class="hero-badges">
+        <div class="badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          No account required
         </div>
-
-        <!-- ===== Main Content ===== -->
-        <main id="main-content" data-mode="split">
-            <!-- Editor Panel -->
-            <div id="editor-panel">
-                <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Start writing Markdown..." aria-label="Markdown editor"></textarea>
-            </div>
-
-            <!-- Panel Divider -->
-            <div id="panel-divider" title="Drag to resize"></div>
-
-            <!-- Preview Panel -->
-            <div id="preview-panel">
-                <article id="preview-content" class="markdown-body"></article>
-            </div>
-
-            <!-- TOC Sidebar (right side) -->
-            <aside id="toc-sidebar">
-                <div class="toc-header">
-                    <span>Contents</span>
-                    <button id="toc-close" class="icon-btn sm" title="Close sidebar" aria-label="Close table of contents sidebar">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                </div>
-                <nav id="toc-nav"></nav>
-            </aside>
-
-            <!-- Inline Editor -->
-            <div id="inline-editor" class="markdown-body"></div>
-        </main>
-    </div>
-
-    <!-- ===== App Menu Drawer ===== -->
-    <div class="drawer-overlay" id="app-menu-overlay">
-        <aside class="drawer-panel" id="app-menu-panel" aria-label="App menu">
-            <div class="drawer-header">
-                <h3>MarkdStudio</h3>
-                <button id="app-menu-close" class="icon-btn sm" title="Close menu" aria-label="Close menu">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            <div class="drawer-nav" role="tablist" aria-label="Menu pages">
-                <button class="drawer-nav-btn active" data-page="about" role="tab" aria-selected="true">About</button>
-                <button class="drawer-nav-btn" data-page="shortcuts" role="tab" aria-selected="false">Shortcuts</button>
-                <button class="drawer-nav-btn" data-page="skill" role="tab" aria-selected="false">skill.md</button>
-            </div>
-            <div class="drawer-body">
-                <section class="drawer-page active" data-page="about">
-                    <h4>About MarkdStudio</h4>
-                    <p>MarkdStudio is a modern writing studio for technical and long-form Markdown. It combines a fast code editor, polished live preview, and export-ready output in one focused workspace.</p>
-                    <p>It supports themes, diagrams, math, callouts, rich inline editing, and productivity shortcuts so you can move from draft to publish quickly.</p>
-                    <p><br><b>v1.0.0</b></p>
-                    <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">
-                    <h4>Developer</h4>
-                    <p style="font-weight:600;margin-bottom:0.25rem;">MD TahsinAli Abtahi</p>
-                    <!-- <p style="font-size:0.85rem;opacity:0.8;margin-bottom:0.75rem;">11th-grade student &amp; aspiring developer. Started with Minecraft redstone, ended up writing Python. Hackathon veteran (Zonal level, top 120 nationally).</p> -->
-                    <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.85rem;">
-                        <a href="https://tahsin2155.github.io" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">🌐 Portfolio</a>
-                        <a href="https://github.com/Tahsin2155" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">🐙 GitHub</a>
-                        <a href="https://www.instagram.com/tahsin_2155" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">📸 @tahsin_2155</a>
-                        <a href="mailto:tahsindlg@gmail.com" style="color:var(--accent);">✉️ Mail</a>
-                    </div>
-                </section>
-                <section class="drawer-page" data-page="shortcuts">
-                    <h4>Keyboard Shortcuts</h4>
-                    <p><strong>Global</strong></p>
-                    <ul>
-                        <li><kbd>Ctrl/Cmd+S</kbd> Save to disk</li>
-                        <li><kbd>Ctrl/Cmd+O</kbd> Open file</li>
-                        <li><kbd>Ctrl/Cmd+N</kbd> New document</li>
-                    </ul>
-                    <p><strong>Code Editor (Write/Split)</strong></p>
-                    <ul>
-                        <li><kbd>Ctrl/Cmd+F</kbd> Find</li>
-                        <li><kbd>Ctrl+H</kbd> Replace</li>
-                        <li><kbd>Cmd+Alt+F</kbd> Replace (macOS)</li>
-                        <li><kbd>Ctrl/Cmd+G</kbd> Find next</li>
-                        <li><kbd>Shift+Ctrl/Cmd+G</kbd> Find previous</li>
-                        <li><kbd>Ctrl/Cmd+/</kbd> Toggle comment</li>
-                        <li><kbd>Tab</kbd> Indent</li>
-                        <li><kbd>Shift+Tab</kbd> Outdent</li>
-                    </ul>
-                    <p><strong>Markdown Formatting</strong></p>
-                    <ul>
-                        <li><kbd>Ctrl/Cmd+B</kbd> Bold</li>
-                        <li><kbd>Ctrl/Cmd+I</kbd> Italic</li>
-                        <li><kbd>Ctrl/Cmd+K</kbd> Link</li>
-                        <li><kbd>Ctrl/Cmd+`</kbd> Inline code</li>
-                        <li><kbd>Ctrl/Cmd+~</kbd> Strikethrough</li>
-                        <li><kbd>Ctrl/Cmd+'</kbd> Blockquote</li>
-                    </ul>
-                    <p><strong>Inline Visual Editor</strong></p>
-                    <ul>
-                        <li><kbd>Ctrl/Cmd+B</kbd> Bold</li>
-                        <li><kbd>Ctrl/Cmd+I</kbd> Italic</li>
-                        <li><kbd>Ctrl/Cmd+K</kbd> Insert link</li>
-                        <li><kbd>Ctrl/Cmd+Shift+7</kbd> Numbered list</li>
-                        <li><kbd>Ctrl/Cmd+Shift+8</kbd> Bulleted list</li>
-                    </ul>
-                </section>
-                <section class="drawer-page" data-page="skill">
-                    <h4>Skill Files</h4>
-                    <p>Download all four skill files for use with AI coding assistants.</p>
-                    <ul style="font-size:0.85rem;margin:0 0 1rem 1.2rem;opacity:0.8;">
-                        <li>skill.md — trigger rules and formatting guide</li>
-                        <li>REFERENCE.md — full Markdown syntax reference</li>
-                        <li>EXAMPLES.md — complete document examples</li>
-                        <li>TEMPLATES.md — reusable document templates</li>
-                    </ul>
-                    <button id="download-skill-btn" class="btn btn-primary">Download All Skill Files</button>
-                </section>
-            </div>
-        </aside>
-    </div>
-
-    <!-- ===== Embed Modal ===== -->
-    <div class="modal-overlay" id="embed-modal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3>Embed HTML</h3>
-                <button class="modal-close" aria-label="Close embed dialog">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Copy this HTML snippet to embed in your website:</p>
-                <textarea id="embed-code" readonly rows="12"></textarea>
-                <button id="copy-embed-btn" class="btn btn-primary">Copy to Clipboard</button>
-            </div>
+        <div class="badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Works offline
         </div>
+        <div class="badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Auto-saves locally
+        </div>
+      </div>
     </div>
 
-    <!-- Hidden File Input -->
-    <input type="file" id="file-input" accept=".md,.markdown,.txt,.text" hidden>
+    <!-- App mockup that mirrors the real UI -->
+    <div class="hero-visual">
+      <div class="app-frame">
+        <div class="af-header">
+          <div class="af-logo">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+            MarkdStudio
+          </div>
+          <div class="af-mode-sw">
+            <div class="af-mode active">⊞ Split</div>
+            <div class="af-mode">✎ Write</div>
+            <div class="af-mode">◎ Preview</div>
+            <div class="af-mode">✐ Inline</div>
+          </div>
+          <div class="af-pills">
+            <div class="af-pill">Theme</div>
+            <div class="af-pill">File</div>
+            <div class="af-pill">Export</div>
+          </div>
+        </div>
+        <div class="af-tabs">
+          <div class="af-tab">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            project-notes.md <span class="af-tab-x">×</span>
+          </div>
+        </div>
+        <div class="af-body">
+          <div class="af-editor">
+            <div class="ed-line"><span class="t-h1"># Project Notes</span></div>
+            <div class="ed-line t-muted">&nbsp;</div>
+            <div class="ed-line"><span class="t-h2">## Overview</span></div>
+            <div class="ed-line t-muted">&nbsp;</div>
+            <div class="ed-line">A <span class="t-bold">**focused**</span> Markdown editor</div>
+            <div class="ed-line">with <span class="t-italic">*live preview*</span>.</div>
+            <div class="ed-line t-muted">&nbsp;</div>
+            <div class="ed-line"><span class="t-bullet">-</span> <span class="t-code">`KaTeX`</span> math support</div>
+            <div class="ed-line"><span class="t-bullet">-</span> Mermaid diagrams</div>
+            <div class="ed-line"><span class="t-bullet">-</span> <span class="t-link">[PDF export](#)</span></div>
+            <div class="ed-line t-muted">&nbsp;</div>
+            <div class="ed-line"><span class="t-math">$$E = mc^2$$</span></div>
+            <div class="ed-line t-muted">&nbsp;</div>
+            <div class="ed-line"><span class="t-muted">&gt; </span><span class="t-bullet">[!NOTE]</span></div>
+            <div class="ed-line"><span class="t-muted">&gt; Callouts work too.</span><span class="cursor"></span></div>
+          </div>
+          <div class="af-divider"></div>
+          <div class="af-preview">
+            <div class="pv-h1">Project Notes</div>
+            <div class="pv-h2">Overview</div>
+            <div class="pv-p">A <strong>focused</strong> Markdown editor with <em>live preview</em>.</div>
+            <div class="pv-li"><code style="background:var(--surface-2);padding:1px 4px;border-radius:3px;font-family:var(--font-code);font-size:.8em">KaTeX</code> math support</div>
+            <div class="pv-li">Mermaid diagrams</div>
+            <div class="pv-li"><span style="color:var(--blue)">PDF export</span></div>
+            <div class="pv-math">E = mc²</div>
+            <div class="pv-callout">
+              <div class="pv-callout-title">ℹ️ Note</div>
+              Callouts work too.
+            </div>
+          </div>
+          <div class="af-toc">
+            <div class="af-toc-head">Contents</div>
+            <div class="toc-row active">Project Notes</div>
+            <div class="toc-row l2 active">Overview</div>
+            <div class="toc-row l2">Features</div>
+          </div>
+        </div>
+        <div class="af-statusbar">
+          <span>184 words</span><span class="sep">·</span>
+          <span>1,071 chars</span><span class="sep">·</span>
+          <span>1 min read</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ===== CDN Libraries ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> CodeMirror 5 editor</div>
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Syntax highlighting</div>
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Multi-tab documents</div>
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 5 reading themes</div>
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> IndexedDB persistence</div>
+    <div class="strip-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Drag &amp; drop .md files</div>
+  </div>
+</div>
 
-    <!-- App -->
-    <script src="app.js"></script>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="label">features</div>
+      <h2>Everything you need to write seriously</h2>
+      <p>A full Markdown workflow — code editor, live preview, extended syntax, and polished exports — in one focused browser app.</p>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+        <div class="feat-title">CodeMirror 5 Editor</div>
+        <p class="feat-desc">Full-featured code editor with syntax highlighting, line numbers, bracket matching, multi-cursor, find &amp; replace with regex, and comment toggling.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="feat-title">Live Split Preview</div>
+        <p class="feat-desc">Side-by-side editor and preview with synchronized scrolling. Preview updates in real-time as you type — GFM, tables, task lists included.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+        <div class="feat-title">5 Reading Themes</div>
+        <p class="feat-desc">Switch between GitHub, Documentation, Blog, Minimal, and Academic themes. Each has full light and dark mode support, plus typography controls.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
+        <div class="feat-title">KaTeX Math</div>
+        <p class="feat-desc">Inline <code style="font-size:.85em;background:var(--surface-2);padding:1px 4px;border-radius:3px">$E=mc^2$</code> and block <code style="font-size:.85em;background:var(--surface-2);padding:1px 4px;border-radius:3px">$$...$$</code> LaTeX equations rendered with KaTeX instantly.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg></div>
+        <div class="feat-title">Mermaid Diagrams</div>
+        <p class="feat-desc">Embed flowcharts, sequence diagrams, Gantt charts, and more using Mermaid syntax in fenced code blocks — rendered live.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="feat-title">Dynamic Table of Contents</div>
+        <p class="feat-desc">Auto-generated from headings with active-section tracking as you scroll. Multi-tab documents with unsaved-change indicators.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODES -->
+<section class="modes-section" id="modes">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="label">editing modes</div>
+      <h2>Four modes for every workflow</h2>
+      <p>Switch modes at any time from the header bar. Whether you prefer distraction-free writing or a WYSIWYG approach, there's a mode for it.</p>
+    </div>
+    <div class="modes-grid reveal">
+      <div class="mode-card">
+        <div class="mode-number">01 — Split</div>
+        <div class="mode-name">Split View</div>
+        <p class="mode-desc">Editor and preview side-by-side with synchronized scrolling. The default mode for seeing both at once.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number">02 — Write</div>
+        <div class="mode-name">Write Mode</div>
+        <p class="mode-desc">Full-screen CodeMirror editor. Focus entirely on writing with the full code editor feature set and no preview distraction.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number">03 — Preview</div>
+        <div class="mode-name">Preview Mode</div>
+        <p class="mode-desc">Full-screen rendered preview. See exactly how your document will look when exported or published.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-number">04 — Inline</div>
+        <div class="mode-name">Inline Editor</div>
+        <p class="mode-desc">Rich WYSIWYG editing directly on the rendered document with a floating formatting toolbar. Syncs back to Markdown automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYNTAX SHOWCASE -->
+<section class="syntax-section" id="syntax">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="label">extended syntax</div>
+      <h2>Rich syntax, zero configuration</h2>
+    </div>
+    <div class="syntax-layout reveal">
+      <div class="syntax-desc">
+        <h3>Beyond standard Markdown</h3>
+        <p>MarkdStudio renders the full GitHub Flavored Markdown spec plus a rich set of extended syntax — all parsed and displayed in real-time as you type.</p>
+        <p>No plugins, no extensions to install, no configuration files.</p>
+        <div class="syntax-chips">
+          <span class="chip">KaTeX math</span>
+          <span class="chip">Mermaid diagrams</span>
+          <span class="chip">Callouts</span>
+          <span class="chip">Footnotes</span>
+          <span class="chip">Task lists</span>
+          <span class="chip">Tables</span>
+          <span class="chip">Emoji shortcodes</span>
+          <span class="chip">Strikethrough</span>
+          <span class="chip">&lt;kbd&gt; tags</span>
+          <span class="chip">&lt;mark&gt; highlight</span>
+          <span class="chip">Details / Summary</span>
+          <span class="chip">Sup / Sub</span>
+        </div>
+      </div>
+      <div class="code-block-dark">
+        <div class="code-header-dark">
+          <span>project-notes.md</span>
+          <span>MarkdStudio editor</span>
+        </div>
+        <div class="code-body-dark">
+          <div><span class="dk-h"># Technical Notes</span></div>
+          <div>&nbsp;</div>
+          <div><span class="dk-h">## Math</span></div>
+          <div><span class="dk-math">$$\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$</span></div>
+          <div>&nbsp;</div>
+          <div><span class="dk-h">## Diagram</span></div>
+          <div><span class="dk-muted">```mermaid</span></div>
+          <div><span class="dk-bullet">graph TD</span></div>
+          <div>&nbsp;&nbsp;A[Write] --> B{Preview ok?}</div>
+          <div>&nbsp;&nbsp;B -->|Yes| C[Export PDF]</div>
+          <div>&nbsp;&nbsp;B -->|No| A</div>
+          <div><span class="dk-muted">```</span></div>
+          <div>&nbsp;</div>
+          <div><span class="dk-callout">&gt; [!NOTE]</span></div>
+          <div><span class="dk-callout">&gt; Callouts render with colour and icon.</span></div>
+          <div>&nbsp;</div>
+          <div><span class="dk-h">## Tasks</span></div>
+          <div><span class="dk-task">- [x]</span> Draft complete</div>
+          <div><span class="dk-task">- [ ]</span> Review &amp; export</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPORT -->
+<section class="export-section" id="export">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="label">export</div>
+      <h2>Publish anywhere</h2>
+      <p>Five export formats for every destination — from GitHub README to printed PDF.</p>
+    </div>
+    <div class="export-grid reveal">
+      <div class="export-card">
+        <div class="export-card-icon">📄</div>
+        <div class="export-card-title">PDF Export</div>
+        <p class="export-card-desc">Configurable margin, paper size (A4, Letter, Legal), and orientation. Rendered with html2pdf for pixel-perfect output.</p>
+      </div>
+      <div class="export-card">
+        <div class="export-card-icon">🌐</div>
+        <div class="export-card-title">HTML Export</div>
+        <p class="export-card-desc">Standalone HTML file with embedded styles, syntax highlighting, and KaTeX CSS — ready to host or share directly.</p>
+      </div>
+      <div class="export-card">
+        <div class="export-card-icon">📋</div>
+        <div class="export-card-title">Embed Snippet</div>
+        <p class="export-card-desc">Copy an HTML snippet to drop into any website or CMS. One click copies to clipboard.</p>
+      </div>
+      <div class="export-card">
+        <div class="export-card-icon">⬇️</div>
+        <div class="export-card-title">Download Markdown</div>
+        <p class="export-card-desc">Save your raw .md file to disk. Also supports Save to Disk via the File System Access API on supporting browsers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="signup">
+  <div class="label">get started</div>
+  <h2 class="cta-title">Start writing in seconds.</h2>
+  <p class="cta-sub">Open the app and begin — no account, no install, no config. Your documents save automatically in your browser.</p>
+  <div class="cta-actions">
+    <a class="btn-white" href="/app/">
+      Open App
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a class="btn-ghost" href="https://github.com/Tahsin2155/MarkdStudio#readme" target="_blank" rel="noopener noreferrer" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2);color:#fff;">
+      Read docs
+    </a>
+  </div>
+  <p class="cta-note">No signup required · runs in your browser · local autosave</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+      <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+      <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+    </svg>
+    MarkdStudio
+  </div>
+  <ul class="footer-links">
+    <li><a href="/app/">Open App</a></li>
+    <li><a href="https://tahsin2155.github.io" target="_blank" rel="noopener noreferrer">Developer</a></li>
+    <li><a href="https://github.com/Tahsin2155" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    <li><a href="https://github.com/Tahsin2155/MarkdStudio" target="_blank" rel="noopener noreferrer">GitHub - Repo</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 MarkdStudio · MD Tahsin Ali Abtahi</div>
+</footer>
+
+<script>
+  const appearanceButtons = document.querySelectorAll('.appearance-btn');
+  const appearanceStorageKey = 'ms-landing-appearance';
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function getStoredAppearance() {
+    try {
+      return localStorage.getItem(appearanceStorageKey) || 'system';
+    } catch (_) {
+      return 'system';
+    }
+  }
+
+  function getEffectiveAppearance(mode) {
+    return mode === 'system' ? (media.matches ? 'dark' : 'light') : mode;
+  }
+
+  function setThemeColor(effective) {
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) themeMeta.setAttribute('content', effective === 'dark' ? '#0d1117' : '#0969da');
+  }
+
+  function applyAppearance(mode) {
+    const effective = getEffectiveAppearance(mode);
+    document.documentElement.setAttribute('data-appearance', effective);
+    appearanceButtons.forEach((btn) => {
+      const active = btn.getAttribute('data-appearance') === mode;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    setThemeColor(effective);
+  }
+
+  function persistAppearance(mode) {
+    try {
+      localStorage.setItem(appearanceStorageKey, mode);
+    } catch (_) {
+    }
+  }
+
+  appearanceButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mode = btn.getAttribute('data-appearance');
+      persistAppearance(mode);
+      applyAppearance(mode);
+    });
+  });
+
+  const onSystemChange = () => {
+    if (getStoredAppearance() === 'system') applyAppearance('system');
+  };
+
+  if (media.addEventListener) media.addEventListener('change', onSystemChange);
+  else if (media.addListener) media.addListener(onSystemChange);
+
+  applyAppearance(getStoredAppearance());
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      const children = e.target.querySelectorAll('.feat-card, .mode-card, .export-card');
+      children.forEach((c, i) => {
+        c.style.opacity = '0';
+        c.style.transform = 'translateY(14px)';
+        c.style.transition = 'opacity .45s ease, transform .45s ease';
+        setTimeout(() => {
+          c.style.opacity = '1';
+          c.style.transform = 'none';
+        }, 60 + i * 65);
+      });
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+</script>
 </body>
 </html>

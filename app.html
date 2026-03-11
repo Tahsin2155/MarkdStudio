@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="github" data-appearance="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <title>MarkdStudio App - Markdown Editor with Live Preview and Export</title>
+    <meta name="description" content="Use the MarkdStudio app to write Markdown with live preview, Mermaid diagrams, KaTeX math, and export to HTML or PDF.">
+    <meta name="author" content="MarkdStudio">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0969da">
+    <link rel="canonical" href="https://markdstudio.netlify.app/app/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MarkdStudio App - Markdown Editor with Live Preview and Export">
+    <meta property="og:description" content="Write, preview, and export Markdown with Mermaid, KaTeX, themes, and code editor features.">
+    <meta property="og:url" content="https://markdstudio.netlify.app/app/">
+    <meta property="og:site_name" content="MarkdStudio">
+    <meta property="og:image" content="https://markdstudio.netlify.app/og-image.svg">
+    <meta property="og:image:alt" content="MarkdStudio app preview showing markdown editor and live preview panes.">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MarkdStudio App - Markdown Editor with Live Preview and Export">
+    <meta name="twitter:description" content="A fast Markdown editor app for technical writing and publishing workflows.">
+    <meta name="twitter:image" content="https://markdstudio.netlify.app/og-image.svg">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%230969da' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "MarkdStudio",
+            "url": "https://markdstudio.netlify.app/app/",
+            "image": "https://markdstudio.netlify.app/og-image.svg",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "browserRequirements": "Requires JavaScript. Works in modern Chromium, Firefox, and Safari browsers.",
+            "softwareVersion": "1.0",
+            "description": "A web-based Markdown editor app with live preview, code editor capabilities, Mermaid, KaTeX, and export workflows.",
+            "featureList": [
+                "Live markdown preview",
+                "Mermaid diagram rendering",
+                "KaTeX math rendering",
+                "HTML and PDF export",
+                "Multiple editor modes"
+            ],
+            "brand": {
+                "@type": "Brand",
+                "name": "MarkdStudio"
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-theme">
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+    <!-- CodeMirror 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ===== Header ===== -->
+        <header id="app-header">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="icon-btn" title="Open Menu" aria-label="Open navigation menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                </button>
+                <div class="logo">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>MarkdStudio</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="mode-switcher">
+                    <button class="mode-btn active" data-mode="split" title="Split View">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+                        <span>Split</span>
+                    </button>
+                    <button class="mode-btn" data-mode="write" title="Write Mode">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                        <span>Write</span>
+                    </button>
+                    <button class="mode-btn" data-mode="preview" title="Preview Mode">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span>Preview</span>
+                    </button>
+                    <button class="mode-btn" data-mode="inline" title="Inline Mode">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        <span>Inline</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button id="sync-scroll-btn" class="icon-btn active" title="Toggle Sync Scroll" aria-label="Toggle synchronized scrolling">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                </button>
+
+                <!-- Appearance Toggle (Light/Dark/System) -->
+                <div class="dropdown">
+                    <button class="toolbar-btn" id="appearance-toggle" data-dropdown="appearance-menu" title="Appearance">
+                        <svg class="icon-light" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <svg class="icon-dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        <svg class="icon-system" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </button>
+                    <div class="dropdown-menu" id="appearance-menu">
+                        <button class="dropdown-item active" data-appearance="light">Light</button>
+                        <button class="dropdown-item" data-appearance="dark">Dark</button>
+                        <button class="dropdown-item" data-appearance="system">System</button>
+                    </div>
+                </div>
+
+                <!-- Theme Dropdown -->
+                <div class="dropdown">
+                    <button class="toolbar-btn" data-dropdown="theme-menu">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        <span>Theme</span>
+                    </button>
+                    <div class="dropdown-menu" id="theme-menu">
+                        <button class="dropdown-item active" data-theme="github">GitHub</button>
+                        <button class="dropdown-item" data-theme="documentation">Documentation</button>
+                        <button class="dropdown-item" data-theme="blog">Blog</button>
+                        <button class="dropdown-item" data-theme="minimal">Minimal</button>
+                        <button class="dropdown-item" data-theme="academic">Academic</button>
+                    </div>
+                </div>
+
+                <!-- Typography Dropdown -->
+                <div class="dropdown">
+                    <button class="toolbar-btn" data-dropdown="typography-panel">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                        <span>Type</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-panel" id="typography-panel">
+                        <div class="panel-group">
+                            <label for="font-family-select">Font Family</label>
+                            <select id="font-family-select">
+                                <option value="">Theme Default</option>
+                                <option value="'Inter', sans-serif">Inter</option>
+                                <option value="'Merriweather', serif">Merriweather</option>
+                                <option value="'Lora', serif">Lora</option>
+                                <option value="Georgia, serif">Georgia</option>
+                                <option value="system-ui, sans-serif">System</option>
+                            </select>
+                        </div>
+                        <div class="panel-group">
+                            <label>Font Size: <span id="font-size-val">16px</span></label>
+                            <input type="range" id="font-size-range" min="12" max="24" value="16" step="1">
+                        </div>
+                        <div class="panel-group">
+                            <label>Line Height: <span id="line-height-val">1.6</span></label>
+                            <input type="range" id="line-height-range" min="1.2" max="2.4" value="1.6" step="0.1">
+                        </div>
+                        <div class="panel-group">
+                            <label>Max Width: <span id="max-width-val">900px</span></label>
+                            <input type="range" id="max-width-range" min="600" max="1400" value="900" step="50">
+                        </div>
+                        <div class="panel-group">
+                            <button id="typography-reset" class="panel-btn">Reset to Defaults</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Dropdown -->
+                <div class="dropdown">
+                    <button class="toolbar-btn" data-dropdown="file-menu">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                        <span>File</span>
+                    </button>
+                    <div class="dropdown-menu" id="file-menu">
+                        <button class="dropdown-item" id="new-doc-btn">New Document</button>
+                        <button class="dropdown-item" id="open-file-btn">Open File…</button>
+                        <button class="dropdown-item" id="save-file-btn">Save to Disk</button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="upload-file-btn">Upload .md</button>
+                        <button class="dropdown-item" id="download-md-btn">Download .md</button>
+                    </div>
+                </div>
+
+                <!-- Export Dropdown -->
+                <div class="dropdown">
+                    <button class="toolbar-btn" data-dropdown="export-menu">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Export</span>
+                    </button>
+                    <div class="dropdown-menu" id="export-menu">
+                        <button class="dropdown-item" data-export="html">Export HTML</button>
+                        <button class="dropdown-item" data-export="pdf">Export PDF</button>
+                        <button class="dropdown-item" data-export="print">Print</button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" data-export="embed">Embed HTML Snippet</button>
+                        <button class="dropdown-item" data-export="md">Download Markdown</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== Tab Bar ===== -->
+        <div id="tab-bar">
+            <div id="tabs-group">
+                <div id="tabs-container"></div>
+                <button id="new-tab-btn" title="New Document" aria-label="Create new document tab">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </div>
+            <div id="tab-bar-right">
+                <div id="doc-stats" aria-live="polite">0 words · 0 chars</div>
+                <button id="toc-toggle-btn" class="icon-btn sm" title="Toggle Table of Contents" aria-label="Toggle table of contents panel">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== Main Content ===== -->
+        <main id="main-content" data-mode="split">
+            <!-- Editor Panel -->
+            <div id="editor-panel">
+                <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Start writing Markdown..." aria-label="Markdown editor"></textarea>
+            </div>
+
+            <!-- Panel Divider -->
+            <div id="panel-divider" title="Drag to resize"></div>
+
+            <!-- Preview Panel -->
+            <div id="preview-panel">
+                <article id="preview-content" class="markdown-body"></article>
+            </div>
+
+            <!-- TOC Sidebar (right side) -->
+            <aside id="toc-sidebar">
+                <div class="toc-header">
+                    <span>Contents</span>
+                    <button id="toc-close" class="icon-btn sm" title="Close sidebar" aria-label="Close table of contents sidebar">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <nav id="toc-nav"></nav>
+            </aside>
+
+            <!-- Inline Editor -->
+            <div id="inline-editor" class="markdown-body"></div>
+        </main>
+    </div>
+
+    <!-- ===== App Menu Drawer ===== -->
+    <div class="drawer-overlay" id="app-menu-overlay">
+        <aside class="drawer-panel" id="app-menu-panel" aria-label="App menu">
+            <div class="drawer-header">
+                <h3>MarkdStudio</h3>
+                <button id="app-menu-close" class="icon-btn sm" title="Close menu" aria-label="Close menu">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="drawer-nav" role="tablist" aria-label="Menu pages">
+                <button class="drawer-nav-btn active" data-page="about" role="tab" aria-selected="true">About</button>
+                <button class="drawer-nav-btn" data-page="shortcuts" role="tab" aria-selected="false">Shortcuts</button>
+                <button class="drawer-nav-btn" data-page="skill" role="tab" aria-selected="false">skill.md</button>
+            </div>
+            <div class="drawer-body">
+                <section class="drawer-page active" data-page="about">
+                    <h4>About MarkdStudio</h4>
+                    <p>MarkdStudio is a modern writing studio for technical and long-form Markdown. It combines a fast code editor, polished live preview, and export-ready output in one focused workspace.</p>
+                    <p>It supports themes, diagrams, math, callouts, rich inline editing, and productivity shortcuts so you can move from draft to publish quickly.</p>
+                    <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">
+                    <h4>Developer</h4>
+                    <p style="font-weight:600;margin-bottom:0.25rem;">MD TahsinAli Abtahi</p>
+                    <!-- <p style="font-size:0.85rem;opacity:0.8;margin-bottom:0.75rem;">11th-grade student &amp; aspiring developer. Started with Minecraft redstone, ended up writing Python. Hackathon veteran (Zonal level, top 120 nationally).</p> -->
+                    <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.85rem;">
+                        <a href="https://tahsin2155.github.io" target="_blank" rel="noopener noreferrer" style="color:var(--ui-accent);">🌐 Portfolio</a>
+                        <a href="https://github.com/Tahsin2155" target="_blank" rel="noopener noreferrer" style="color:var(--ui-accent);">🐙 GitHub</a>
+                        <a href="https://www.instagram.com/tahsin_2155" target="_blank" rel="noopener noreferrer" style="color:var(--ui-accent);">📸 @tahsin_2155</a>
+                        <a href="mailto:tahsindlg@gmail.com" style="color:var(--ui-accent);">✉️ Mail</a>
+                    </div>
+                </section>
+                <section class="drawer-page" data-page="shortcuts">
+                    <h4>Keyboard Shortcuts</h4>
+                    <p><strong>Global</strong></p>
+                    <ul>
+                        <li><kbd>Ctrl/Cmd+S</kbd> Save to disk</li>
+                        <li><kbd>Ctrl/Cmd+O</kbd> Open file</li>
+                        <li><kbd>Ctrl/Cmd+N</kbd> New document</li>
+                    </ul>
+                    <p><strong>Code Editor (Write/Split)</strong></p>
+                    <ul>
+                        <li><kbd>Ctrl/Cmd+F</kbd> Find</li>
+                        <li><kbd>Ctrl+H</kbd> Replace</li>
+                        <li><kbd>Cmd+Alt+F</kbd> Replace (macOS)</li>
+                        <li><kbd>Ctrl/Cmd+G</kbd> Find next</li>
+                        <li><kbd>Shift+Ctrl/Cmd+G</kbd> Find previous</li>
+                        <li><kbd>Ctrl/Cmd+/</kbd> Toggle comment</li>
+                        <li><kbd>Tab</kbd> Indent</li>
+                        <li><kbd>Shift+Tab</kbd> Outdent</li>
+                    </ul>
+                    <p><strong>Markdown Formatting</strong></p>
+                    <ul>
+                        <li><kbd>Ctrl/Cmd+B</kbd> Bold</li>
+                        <li><kbd>Ctrl/Cmd+I</kbd> Italic</li>
+                        <li><kbd>Ctrl/Cmd+K</kbd> Link</li>
+                        <li><kbd>Ctrl/Cmd+`</kbd> Inline code</li>
+                        <li><kbd>Ctrl/Cmd+~</kbd> Strikethrough</li>
+                        <li><kbd>Ctrl/Cmd+'</kbd> Blockquote</li>
+                    </ul>
+                    <p><strong>Inline Visual Editor</strong></p>
+                    <ul>
+                        <li><kbd>Ctrl/Cmd+B</kbd> Bold</li>
+                        <li><kbd>Ctrl/Cmd+I</kbd> Italic</li>
+                        <li><kbd>Ctrl/Cmd+K</kbd> Insert link</li>
+                        <li><kbd>Ctrl/Cmd+Shift+7</kbd> Numbered list</li>
+                        <li><kbd>Ctrl/Cmd+Shift+8</kbd> Bulleted list</li>
+                    </ul>
+                </section>
+                <section class="drawer-page" data-page="skill">
+                    <h4>Skill Files</h4>
+                    <p>Download all four skill files for use with AI coding assistants.</p>
+                    <ul style="font-size:0.85rem;margin:0 0 1rem 1.2rem;opacity:0.8;">
+                        <li>skill.md — trigger rules and formatting guide</li>
+                        <li>REFERENCE.md — full Markdown syntax reference</li>
+                        <li>EXAMPLES.md — complete document examples</li>
+                        <li>TEMPLATES.md — reusable document templates</li>
+                    </ul>
+                    <button id="download-skill-btn" class="btn btn-primary">Download All Skill Files</button>
+                </section>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ===== Embed Modal ===== -->
+    <div class="modal-overlay" id="embed-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Embed HTML</h3>
+                <button class="modal-close" aria-label="Close embed dialog">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Copy this HTML snippet to embed in your website:</p>
+                <textarea id="embed-code" readonly rows="12"></textarea>
+                <button id="copy-embed-btn" class="btn btn-primary">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="file-input" accept=".md,.markdown,.txt,.text" hidden>
+
+    <!-- ===== CDN Libraries ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- App -->
+    <script src="app.js"></script>
+</body>
+</html>
