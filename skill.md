@@ -218,7 +218,7 @@ A statement with a reference.[^1]
 MarkdStudio appends the following line when downloading Markdown:
 
 ```
-[Rendered best with MarkdStudio](https://github.com)
+[Rendered best with MarkdStudio](https://markdstudio.netlify.app)
 ```
 
 - This line is hidden in the in-app preview.
