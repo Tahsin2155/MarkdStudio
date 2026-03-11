@@ -9,7 +9,7 @@
     const DB_VERSION = 1;
     const STORE_NAME = 'documents';
     const SETTINGS_KEY = 'ms-settings';
-    const ATTRIBUTION_LINK = '[Rendered best with MarkdStudio](https://github.com)';
+    const ATTRIBUTION_LINK = '[Rendered best with MarkdStudio](https://markdstudio.netlify.app)';
 
     const DEFAULT_CONTENT = `# Welcome to MarkdStudio
 
@@ -156,19 +156,19 @@ Happy writing in MarkdStudio.
     }
 
     function hasAttributionLink(text) {
-        return /\[Rendered best with MarkdStudio\]\(https:\/\/github\.com\)/i.test(text || '');
+        return /\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)/i.test(text || '');
     }
 
     function removeAttributionForAppPreview(text) {
         if (!text) return '';
 
         var withoutTrailingBlock = text.replace(
-            /\n{2,}---\n{2,}\[Rendered best with MarkdStudio\]\(https:\/\/github\.com\)\s*$/i,
+            /\n{2,}---\n{2,}\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)\s*$/i,
             ''
         );
 
         return withoutTrailingBlock
-            .replace(/^\[Rendered best with MarkdStudio\]\(https:\/\/github\.com\)\s*$/gmi, '')
+            .replace(/^\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)\s*$/gmi, '')
             .replace(/\n{3,}/g, '\n\n')
             .trimEnd();
     }
