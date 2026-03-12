@@ -9,7 +9,6 @@
     const DB_VERSION = 1;
     const STORE_NAME = 'documents';
     const SETTINGS_KEY = 'ms-settings';
-    const ATTRIBUTION_LINK = '[Rendered best with MarkdStudio](https://markdstudio.netlify.app)';
 
     const DEFAULT_CONTENT = `# Welcome to MarkdStudio
 
@@ -62,21 +61,17 @@ function greet(name) {
 Happy writing in MarkdStudio.
 `;
 
-    const EMOJI_MAP = {
-        ':smile:': '😄', ':grinning:': '😀', ':laughing:': '😆', ':joy:': '😂',
-        ':heart:': '❤️', ':hearts:': '❤️', ':thumbsup:': '👍', ':+1:': '👍',
-        ':thumbsdown:': '👎', ':-1:': '👎', ':star:': '⭐', ':star2:': '🌟',
-        ':fire:': '🔥', ':rocket:': '🚀', ':check:': '✅', ':white_check_mark:': '✅',
-        ':x:': '❌', ':warning:': '⚠️', ':bulb:': '💡', ':memo:': '📝',
-        ':link:': '🔗', ':book:': '📖', ':sparkles:': '✨', ':bug:': '🐛',
-        ':wrench:': '🔧', ':lock:': '🔒', ':key:': '🔑', ':tada:': '🎉',
-        ':eyes:': '👀', ':thinking:': '🤔', ':wave:': '👋', ':clap:': '👏',
-        ':100:': '💯', ':zap:': '⚡', ':globe_with_meridians:': '🌐',
-        ':package:': '📦', ':hammer:': '🔨', ':gear:': '⚙️', ':shield:': '🛡️',
-        ':arrow_right:': '➡️', ':arrow_left:': '⬅️', ':arrow_up:': '⬆️',
-        ':arrow_down:': '⬇️', ':heavy_check_mark:': '✔️', ':point_right:': '👉',
-        ':information_source:': 'ℹ️', ':exclamation:': '❗', ':question:': '❓',
-    };
+    // ================================================================
+    //  MARKDOWN ENGINE ALIASES
+    // ================================================================
+
+    var escapeHtml = MarkdEngine.escapeHtml;
+    var hasAttributionLink = MarkdEngine.hasAttributionLink;
+    var renderMarkdown = MarkdEngine.renderMarkdown;
+    var postProcessPreview = MarkdEngine.postProcessPreview;
+    var richHtmlToMarkdown = MarkdEngine.richHtmlToMarkdown;
+    var configureMarked = MarkdEngine.configureMarked;
+    var ATTRIBUTION_LINK = MarkdEngine.ATTRIBUTION_LINK;
 
     // ================================================================
     //  STATE
@@ -90,6 +85,7 @@ Happy writing in MarkdStudio.
         appearance: 'light',
         syncScroll: true,
         sidebarOpen: true,
+        splitRatio: 0.5,
         typography: {
             fontFamily: '',
             fontSize: 16,
@@ -99,16 +95,14 @@ Happy writing in MarkdStudio.
     };
 
     // Rendering helpers
-    let mathCounter = 0;
-    let mathStore = {};
-    let mermaidStore = {};
-    let mermaidCounter = 0;
     let renderTimeout = null;
     let autoSaveTimeout = null;
     let scrollSyncSource = null;
     let dbPromise = null;
     let tocScrollContainer = null;
     let tocScrollHandler = null;
+    let layoutRefreshFrame = null;
+    let lastPreviewState = null;
 
     // DOM references (set in init)
     let editorEl, previewPanelEl, previewContentEl, tocNavEl, tabsContainerEl, docStatsEl;
@@ -124,13 +118,6 @@ Happy writing in MarkdStudio.
 
     function generateId() {
         return Date.now().toString(36) + Math.random().toString(36).slice(2, 11);
-    }
-
-    function escapeHtml(str) {
-        if (str === null || str === undefined) return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
     }
 
     function debounce(fn, ms) {
@@ -153,24 +140,6 @@ Happy writing in MarkdStudio.
         el.textContent = msg;
         el.classList.add('show');
         setTimeout(() => el.classList.remove('show'), 1800);
-    }
-
-    function hasAttributionLink(text) {
-        return /\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)/i.test(text || '');
-    }
-
-    function removeAttributionForAppPreview(text) {
-        if (!text) return '';
-
-        var withoutTrailingBlock = text.replace(
-            /\n{2,}---\n{2,}\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)\s*$/i,
-            ''
-        );
-
-        return withoutTrailingBlock
-            .replace(/^\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)\s*$/gmi, '')
-            .replace(/\n{3,}/g, '\n\n')
-            .trimEnd();
     }
 
     function hasUnsavedDocuments() {
@@ -406,222 +375,12 @@ Happy writing in MarkdStudio.
             appearance: state.appearance,
             syncScroll: state.syncScroll,
             sidebarOpen: state.sidebarOpen,
+            splitRatio: state.splitRatio,
             typography: state.typography,
             activeDocId: state.activeDocId,
             openDocIds: state.documents.map(d => d.id)
         };
         localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
-    }
-
-    // ================================================================
-    //  MARKDOWN RENDERER
-    // ================================================================
-
-    function configureMarked() {
-        const renderer = new marked.Renderer();
-
-        // Headings with IDs for TOC
-        renderer.heading = function (text, level, raw, slugger) {
-            const id = slugger.slug(raw);
-            return '<h' + level + ' id="' + escapeHtml(id) + '">' + text + '</h' + level + '>\n';
-        };
-
-        // Code blocks with copy button + mermaid/math
-        renderer.code = function (code, language) {
-            if (language === 'mermaid') {
-                const id = 'mermaid-' + (mermaidCounter++);
-                mermaidStore[id] = code;
-                return '<div class="mermaid-block" data-mermaid-id="' + id + '"></div>';
-            }
-
-            let highlighted;
-            const lang = language ? language.trim().split(/\s+/)[0] : '';
-            if (lang && typeof hljs !== 'undefined' && hljs.getLanguage(lang)) {
-                try { highlighted = hljs.highlight(code, { language: lang }).value; }
-                catch (e) { highlighted = escapeHtml(code); }
-            } else {
-                highlighted = escapeHtml(code);
-            }
-
-            return '<div class="code-block">'
-                + '<div class="code-header">'
-                + '<span class="code-lang">' + escapeHtml(lang) + '</span>'
-                + '<button class="copy-btn" title="Copy code">Copy</button>'
-                + '</div>'
-                + '<pre><code class="hljs language-' + escapeHtml(lang || 'plaintext') + '">' + highlighted + '</code></pre>'
-                + '</div>';
-        };
-
-        // Blockquotes with callout support
-        renderer.blockquote = function (quote) {
-            const calloutRe = /^<p>\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*(?:<br\s*\/?>)?\n?\s*/i;
-            const m = quote.match(calloutRe);
-            if (m) {
-                const type = m[1].toLowerCase();
-                const body = quote.replace(m[0], '<p>');
-                const icons = { note: 'ℹ️', tip: '💡', warning: '⚠️', important: '❗', caution: '🔴' };
-                const labels = { note: 'Note', tip: 'Tip', warning: 'Warning', important: 'Important', caution: 'Caution' };
-                return '<div class="callout callout-' + type + '">'
-                    + '<div class="callout-title"><span class="callout-icon">' + icons[type] + '</span> ' + labels[type] + '</div>'
-                    + '<div class="callout-body">' + body + '</div>'
-                    + '</div>\n';
-            }
-            return '<blockquote>\n' + quote + '</blockquote>\n';
-        };
-
-        // Tables wrapped for scroll
-        renderer.table = function (header, body) {
-            return '<div class="table-wrapper"><table><thead>' + header + '</thead><tbody>' + body + '</tbody></table></div>';
-        };
-
-        // Links open in new tab
-        renderer.link = function (href, title, text) {
-            href = href || '#';
-            const normalizedHref = href.trim();
-            const isSafeHref = /^(https?:|mailto:|tel:|#|\/)/i.test(normalizedHref);
-            const safeHref = isSafeHref ? normalizedHref : '#';
-            const titleAttr = title ? ' title="' + escapeHtml(title) + '"' : '';
-            const isExternal = safeHref.startsWith('http://') || safeHref.startsWith('https://');
-            const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-            return '<a href="' + escapeHtml(safeHref) + '"' + titleAttr + target + '>' + text + '</a>';
-        };
-
-        // Task list items
-        renderer.listitem = function (text, task, checked) {
-            if (task) {
-                return '<li class="task-list-item">' + text + '</li>\n';
-            }
-            return '<li>' + text + '</li>\n';
-        };
-
-        marked.setOptions({
-            renderer: renderer,
-            gfm: true,
-            breaks: false,
-            smartypants: true,
-            smartLists: true
-        });
-    }
-
-    // Pre-process: footnotes
-    function preprocessFootnotes(text) {
-        const footnotes = {};
-        let index = 0;
-        const withoutDefs = text.replace(/^\[\^([^\]]+)\]:\s*(.+)$/gm, function (match, id, content) {
-            footnotes[id] = { content: content, index: ++index };
-            return '';
-        });
-        if (Object.keys(footnotes).length === 0) return text;
-
-        let result = withoutDefs.replace(/\[\^([^\]]+)\]/g, function (match, id) {
-            if (footnotes[id]) {
-                return '<sup class="footnote-ref"><a href="#fn-' + escapeHtml(id) + '" id="fnref-' + escapeHtml(id) + '">' + footnotes[id].index + '</a></sup>';
-            }
-            return match;
-        });
-
-        result += '\n\n<section class="footnotes"><hr><ol>';
-        for (var id in footnotes) {
-            if (footnotes.hasOwnProperty(id)) {
-                result += '<li id="fn-' + escapeHtml(id) + '"><p>' + escapeHtml(footnotes[id].content) + ' <a href="#fnref-' + escapeHtml(id) + '" class="footnote-backref">\u21a9</a></p></li>';
-            }
-        }
-        result += '</ol></section>';
-        return result;
-    }
-
-    // Pre-process: math (extract before marked parsing)
-    function preprocessMath(text) {
-        // Display math: $$...$$
-        text = text.replace(/\$\$([\s\S]+?)\$\$/g, function (match, tex) {
-            var id = 'math-' + (mathCounter++);
-            mathStore[id] = { tex: tex.trim(), display: true };
-            return '<div class="math-display" data-math-id="' + id + '"></div>';
-        });
-        // Inline math: $...$
-        text = text.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, function (match, tex) {
-            var id = 'math-' + (mathCounter++);
-            mathStore[id] = { tex: tex, display: false };
-            return '<span class="math-inline" data-math-id="' + id + '"></span>';
-        });
-        return text;
-    }
-
-    // Pre-process: emoji
-    function preprocessEmoji(text) {
-        return text.replace(/:([a-z0-9_+-]+):/gi, function (match) {
-            return EMOJI_MAP[match] ? '<span class="emoji">' + EMOJI_MAP[match] + '</span>' : match;
-        });
-    }
-
-    // Render markdown to HTML
-    function renderMarkdown(source, options) {
-        options = options || {};
-        mathCounter = 0;
-        mathStore = {};
-        mermaidStore = {};
-        mermaidCounter = 0;
-
-        let text = source;
-        if (options.hideAttributionInApp) {
-            text = removeAttributionForAppPreview(text);
-        }
-        text = preprocessFootnotes(text);
-        text = preprocessMath(text);
-        text = preprocessEmoji(text);
-
-        const rawHtml = marked.parse(text);
-
-        // Sanitize
-        const clean = DOMPurify.sanitize(rawHtml, {
-            ADD_TAGS: ['details', 'summary', 'mark', 'kbd', 'sup', 'sub', 'abbr'],
-            ADD_ATTR: ['open', 'data-math-id', 'data-mermaid-id', 'disabled', 'checked', 'type']
-        });
-
-        return clean;
-    }
-
-    // Post-process DOM: render KaTeX and Mermaid
-    function postProcessPreview(container) {
-        // KaTeX
-        if (typeof katex !== 'undefined') {
-            container.querySelectorAll('[data-math-id]').forEach(function (el) {
-                var id = el.getAttribute('data-math-id');
-                var entry = mathStore[id];
-                if (entry) {
-                    try {
-                        el.innerHTML = katex.renderToString(entry.tex, {
-                            displayMode: entry.display,
-                            throwOnError: false,
-                            output: 'htmlAndMathml'
-                        });
-                    } catch (e) {
-                        el.textContent = entry.tex;
-                        el.classList.add('math-error');
-                    }
-                }
-            });
-        }
-
-        // Mermaid
-        if (typeof mermaid !== 'undefined') {
-            container.querySelectorAll('[data-mermaid-id]').forEach(function (el) {
-                var id = el.getAttribute('data-mermaid-id');
-                var code = mermaidStore[id];
-                if (code) {
-                    try {
-                        var mermaidId = 'mmd-' + id;
-                        mermaid.render(mermaidId, code).then(function (result) {
-                            el.innerHTML = result.svg;
-                        }).catch(function () {
-                            el.innerHTML = '<div class="mermaid-error">Error rendering diagram</div>';
-                        });
-                    } catch (e) {
-                        el.innerHTML = '<div class="mermaid-error">Error rendering diagram</div>';
-                    }
-                }
-            });
-        }
     }
 
     // ================================================================
@@ -693,6 +452,50 @@ Happy writing in MarkdStudio.
         const scrollContainer = getTOCScrollContainer();
         requestAnimationFrame(function () {
             updateActiveTOCItem(scrollContainer);
+        });
+    }
+
+    function getVisibleTOCWidth() {
+        if (!tocSidebarEl) return 0;
+        if (!state.sidebarOpen) return 0;
+        if (isMobileViewport()) return 0;
+        // Use the CSS-declared width so layout isn't affected by transition timing.
+        return window.matchMedia('(max-width: 900px)').matches ? 200 : 240;
+    }
+
+    function normalizeSplitPanelLayout() {
+        if (!mainContentEl) return;
+        if (state.mode !== 'split') return;
+
+        var editorPanel = document.getElementById('editor-panel');
+        var previewPanel = document.getElementById('preview-panel');
+        if (!editorPanel || !previewPanel) return;
+
+        var r = Math.max(0.2, Math.min(0.8, state.splitRatio || 0.5));
+        editorPanel.style.flex = r + ' 1 0px';
+        previewPanel.style.flex = (1 - r) + ' 1 0px';
+    }
+
+    function refreshLayoutSoon(rebuildTOC) {
+        if (rebuildTOC === undefined) rebuildTOC = true;
+        if (layoutRefreshFrame) cancelAnimationFrame(layoutRefreshFrame);
+
+        layoutRefreshFrame = requestAnimationFrame(function () {
+            normalizeSplitPanelLayout();
+
+            if (cmEditor) {
+                cmEditor.refresh();
+            }
+
+            if (rebuildTOC) {
+                setupTOCTracking();
+
+                requestAnimationFrame(function () {
+                    updateTOC();
+                });
+            }
+
+            layoutRefreshFrame = null;
         });
     }
 
@@ -841,7 +644,10 @@ Happy writing in MarkdStudio.
     //  PREVIEW
     // ================================================================
 
-    function updatePreview() {
+    function updatePreview(options) {
+        options = options || {};
+        var forceRender = !!options.forceRender;
+
         clearTimeout(renderTimeout);
         renderTimeout = setTimeout(function () {
             var doc = getActiveDocument();
@@ -857,19 +663,40 @@ Happy writing in MarkdStudio.
             }
 
             var html = renderMarkdown(source, { hideAttributionInApp: true });
+            var isEmpty = !source.trim();
+            var shouldReusePreview = !forceRender
+                && lastPreviewState
+                && lastPreviewState.docId === doc.id
+                && lastPreviewState.mode === state.mode
+                && lastPreviewState.source === source
+                && lastPreviewState.html === html
+                && lastPreviewState.isEmpty === isEmpty;
 
             if (state.mode === 'inline') {
-                renderInlineMode(source, html);
+                renderInlineMode(source, html, { forceRender: forceRender || !shouldReusePreview });
             } else {
-                if (!source.trim()) {
-                    previewContentEl.innerHTML = getEmptyPreviewHTML();
-                } else {
-                    previewContentEl.innerHTML = html;
-                    postProcessPreview(previewContentEl);
+                if (!shouldReusePreview) {
+                    if (isEmpty) {
+                        previewContentEl.innerHTML = getEmptyPreviewHTML();
+                    } else {
+                        previewContentEl.innerHTML = html;
+                        postProcessPreview(previewContentEl);
+                    }
                 }
             }
 
-            updateTOC();
+            if (!shouldReusePreview || !lastPreviewState || lastPreviewState.mode !== state.mode) {
+                updateTOC();
+            }
+
+            lastPreviewState = {
+                docId: doc.id,
+                mode: state.mode,
+                source: source,
+                html: html,
+                isEmpty: isEmpty
+            };
+
             updateDocumentTitle();
             updateDocStats();
             scheduleAutoSave();
@@ -953,14 +780,20 @@ Happy writing in MarkdStudio.
         var divider = document.getElementById('panel-divider');
         if (!divider) return;
 
+        var editorPanel = document.getElementById('editor-panel');
+        var previewPanel = document.getElementById('preview-panel');
+        if (!editorPanel || !previewPanel) return;
+
         var isDragging = false;
         var startX = 0;
         var startEditorWidth = 0;
+        var activeWidth = 0;
 
         divider.addEventListener('mousedown', function (e) {
             isDragging = true;
             startX = e.clientX;
-            startEditorWidth = document.getElementById('editor-panel').getBoundingClientRect().width;
+            startEditorWidth = editorPanel.getBoundingClientRect().width;
+            activeWidth = mainContentEl.getBoundingClientRect().width - getVisibleTOCWidth() - 4;
             divider.classList.add('dragging');
             document.body.style.cursor = 'col-resize';
             document.body.style.userSelect = 'none';
@@ -970,12 +803,16 @@ Happy writing in MarkdStudio.
         document.addEventListener('mousemove', function (e) {
             if (!isDragging) return;
             var dx = e.clientX - startX;
-            var sidebar = tocSidebarEl ? (tocSidebarEl.classList.contains('hidden') ? 0 : tocSidebarEl.getBoundingClientRect().width) : 0;
-            var total = mainContentEl.getBoundingClientRect().width - sidebar - 4; // 4 = divider
-            var newWidth = ((startEditorWidth + dx) / total) * 100;
-            newWidth = Math.max(20, Math.min(80, newWidth));
-            document.getElementById('editor-panel').style.flex = '0 0 ' + newWidth + '%';
-            document.getElementById('preview-panel').style.flex = '0 0 ' + (100 - newWidth) + '%';
+            var available = activeWidth > 0 ? activeWidth : (mainContentEl.getBoundingClientRect().width - getVisibleTOCWidth() - 4);
+            if (available <= 40) return;
+            var newEditorWidth = startEditorWidth + dx;
+            var ratio = Math.max(0.2, Math.min(0.8, newEditorWidth / available));
+            state.splitRatio = ratio;
+
+            editorPanel.style.flex = ratio + ' 1 0px';
+            previewPanel.style.flex = (1 - ratio) + ' 1 0px';
+
+            refreshLayoutSoon(false);
         });
 
         document.addEventListener('mouseup', function () {
@@ -984,6 +821,8 @@ Happy writing in MarkdStudio.
             divider.classList.remove('dragging');
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+            refreshLayoutSoon();
+            saveSettings();
         });
     }
 
@@ -991,7 +830,10 @@ Happy writing in MarkdStudio.
     //  INLINE MODE
     // ================================================================
 
-    function renderInlineMode(source, renderedHtml) {
+    function renderInlineMode(source, renderedHtml, options) {
+        options = options || {};
+        var forceRender = !!options.forceRender;
+
         if (!inlineEditorEl) return;
 
         if (!inlineEditorEl.querySelector('.inline-doc-shell')) {
@@ -1196,14 +1038,14 @@ Happy writing in MarkdStudio.
         // Always refresh when switching to a different document.
         if (inlineDocActiveDocId !== state.activeDocId) {
             inlineDocActiveDocId = state.activeDocId;
-            inlineDocEditorEl.innerHTML = source.trim() ? renderMarkdown(source) : '<p><br></p>';
+            inlineDocEditorEl.innerHTML = source.trim() ? renderedHtml : '<p><br></p>';
             postProcessPreview(inlineDocEditorEl);
             return;
         }
 
         // Avoid overriding while user is typing in the inline document editor.
-        if (document.activeElement !== inlineDocEditorEl && !inlineDocSyncing) {
-            inlineDocEditorEl.innerHTML = source.trim() ? renderMarkdown(source) : '<p><br></p>';
+        if ((forceRender || document.activeElement !== inlineDocEditorEl) && !inlineDocSyncing) {
+            inlineDocEditorEl.innerHTML = source.trim() ? renderedHtml : '<p><br></p>';
             postProcessPreview(inlineDocEditorEl);
         }
     }
@@ -1235,156 +1077,6 @@ Happy writing in MarkdStudio.
         inlineDocSyncing = false;
     }
 
-    function richHtmlToMarkdown(html) {
-        var root = document.createElement('div');
-        root.innerHTML = html;
-
-        function childrenToMd(node) {
-            var out = '';
-            Array.prototype.forEach.call(node.childNodes, function (child) {
-                out += nodeToMd(child);
-            });
-            return out;
-        }
-
-        function cleanInline(text) {
-            return text.replace(/\u00a0/g, ' ');
-        }
-
-        function listItemToMd(liNode) {
-            var checkbox = liNode.querySelector('input[type="checkbox"]');
-            if (checkbox && checkbox.parentElement === liNode) checkbox.remove();
-            var text = childrenToMd(liNode).trim();
-            if (checkbox) {
-                var mark = checkbox.checked ? '[x] ' : '[ ] ';
-                text = mark + text;
-            }
-            return text.replace(/\n{2,}/g, '\n').split('\n').map(function (line, i) {
-                return i === 0 ? line : '  ' + line;
-            }).join('\n');
-        }
-
-        function tableToMd(tableNode) {
-            var rows = Array.prototype.slice.call(tableNode.querySelectorAll('tr'));
-            if (!rows.length) return '';
-
-            var matrix = rows.map(function (row) {
-                return Array.prototype.slice.call(row.querySelectorAll('th,td')).map(function (cell) {
-                    return childrenToMd(cell).replace(/\n+/g, ' ').trim() || ' ';
-                });
-            });
-
-            var cols = 0;
-            matrix.forEach(function (r) { cols = Math.max(cols, r.length); });
-            matrix = matrix.map(function (r) {
-                while (r.length < cols) r.push(' ');
-                return r;
-            });
-
-            var header = matrix[0];
-            var divider = new Array(cols).fill('---');
-            var body = matrix.slice(1);
-
-            var lines = [];
-            lines.push('| ' + header.join(' | ') + ' |');
-            lines.push('| ' + divider.join(' | ') + ' |');
-            body.forEach(function (r) {
-                lines.push('| ' + r.join(' | ') + ' |');
-            });
-            return lines.join('\n') + '\n\n';
-        }
-
-        function nodeToMd(node) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                return cleanInline(node.textContent || '');
-            }
-            if (node.nodeType !== Node.ELEMENT_NODE) return '';
-
-            var tag = node.tagName.toLowerCase();
-            var inner = childrenToMd(node);
-
-            if (tag === 'br') return '\n';
-            if (tag === 'strong' || tag === 'b') return '**' + inner.trim() + '**';
-            if (tag === 'em' || tag === 'i') return '*' + inner.trim() + '*';
-            if (tag === 'u') return '<u>' + inner.trim() + '</u>';
-            if (tag === 's' || tag === 'strike' || tag === 'del') return '~~' + inner.trim() + '~~';
-            if (tag === 'code' && (!node.parentElement || node.parentElement.tagName.toLowerCase() !== 'pre')) {
-                return '`' + (node.textContent || '').trim() + '`';
-            }
-            if (tag === 'a') {
-                var href = node.getAttribute('href') || '';
-                return '[' + (inner.trim() || href) + '](' + href + ')';
-            }
-            if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4' || tag === 'h5' || tag === 'h6') {
-                var level = parseInt(tag.slice(1), 10);
-                return new Array(level + 1).join('#') + ' ' + inner.trim() + '\n\n';
-            }
-            if (tag === 'p') {
-                var pText = inner.trim();
-                return pText ? pText + '\n\n' : '';
-            }
-            if (tag === 'blockquote') {
-                var quote = inner.trim();
-                if (!quote) return '';
-                return quote.split('\n').map(function (line) { return '> ' + line; }).join('\n') + '\n\n';
-            }
-            if (tag === 'ul') {
-                var lines = [];
-                Array.prototype.forEach.call(node.children, function (li) {
-                    if (li.tagName && li.tagName.toLowerCase() === 'li') {
-                        lines.push('- ' + listItemToMd(li));
-                    }
-                });
-                return lines.join('\n') + (lines.length ? '\n\n' : '');
-            }
-            if (tag === 'ol') {
-                var num = 1;
-                var olLines = [];
-                Array.prototype.forEach.call(node.children, function (li) {
-                    if (li.tagName && li.tagName.toLowerCase() === 'li') {
-                        olLines.push(num + '. ' + listItemToMd(li));
-                        num += 1;
-                    }
-                });
-                return olLines.join('\n') + (olLines.length ? '\n\n' : '');
-            }
-            if (tag === 'pre') {
-                var code = node.textContent || '';
-                var codeEl = node.querySelector('code');
-                var lang = '';
-                if (codeEl && codeEl.className) {
-                    var m = codeEl.className.match(/language-([A-Za-z0-9_-]+)/);
-                    if (m) lang = m[1];
-                }
-                return '```' + lang + '\n' + code.replace(/\n$/, '') + '\n```\n\n';
-            }
-            if (tag === 'hr') return '---\n\n';
-            if (tag === 'img') {
-                var src = node.getAttribute('src') || '';
-                var alt = node.getAttribute('alt') || '';
-                return '![' + alt + '](' + src + ')\n\n';
-            }
-            if (tag === 'table') return tableToMd(node);
-
-            return inner;
-        }
-
-        var markdown = childrenToMd(root)
-            .replace(/[ \t]+\n/g, '\n')
-            .replace(/\n{3,}/g, '\n\n')
-            .trim();
-
-        return markdown;
-    }
-
-    function startInlineEdit() {
-        // Block editor has been removed; inline mode is now full-document editing.
-    }
-
-    function finishInlineEdit() {
-        // Block editor has been removed; inline mode is now full-document editing.
-    }
-
     // ================================================================
     //  MODE SWITCHING
     // ================================================================
@@ -1392,6 +1084,14 @@ Happy writing in MarkdStudio.
     function setMode(mode) {
         state.mode = mode;
         mainContentEl.setAttribute('data-mode', mode);
+
+        // Clear stale inline flex values from split-mode resizing so CSS rules take effect.
+        if (mode !== 'split') {
+            var ep = document.getElementById('editor-panel');
+            var pp = document.getElementById('preview-panel');
+            if (ep) ep.style.flex = '';
+            if (pp) pp.style.flex = '';
+        }
 
         // Update mode buttons
         document.querySelectorAll('.mode-btn').forEach(function (btn) {
@@ -1410,14 +1110,14 @@ Happy writing in MarkdStudio.
         if (mode === 'inline') {
             var doc = getActiveDocument();
             if (doc) {
-                var html = renderMarkdown(doc.content);
-                renderInlineMode(doc.content, html);
+                var html = renderMarkdown(doc.content, { hideAttributionInApp: true });
+                renderInlineMode(doc.content, html, { forceRender: true });
             }
         } else {
-            updatePreview();
+            updatePreview({ forceRender: true });
         }
 
-        setupTOCTracking();
+        refreshLayoutSoon();
         saveSettings();
     }
 
@@ -1491,7 +1191,7 @@ Happy writing in MarkdStudio.
         state.appearance = appearance;
         applyAppearance();
         // Re-render preview to pick up mermaid theme changes
-        updatePreview();
+        updatePreview({ forceRender: true });
         saveSettings();
     }
 
@@ -1829,7 +1529,7 @@ Happy writing in MarkdStudio.
     }
 
     async function downloadSkillFileFromWorkspace() {
-        var skillFiles = ['skill.md', 'REFERENCE.md', 'EXAMPLES.md', 'TEMPLATES.md'];
+        var skillFiles = ['skill.zip'];
         var downloaded = 0;
 
         function directLinkDownload(filename) {
@@ -2314,6 +2014,7 @@ Happy writing in MarkdStudio.
             tocToggleBtn.addEventListener('click', function () {
                 state.sidebarOpen = !state.sidebarOpen;
                 applyTOCVisibility();
+                refreshLayoutSoon();
                 saveSettings();
             });
         }
@@ -2324,12 +2025,18 @@ Happy writing in MarkdStudio.
             tocClose.addEventListener('click', function () {
                 state.sidebarOpen = false;
                 applyTOCVisibility();
+                refreshLayoutSoon();
                 saveSettings();
             });
         }
 
-        window.addEventListener('resize', function () {
+        var onWindowResize = debounce(function () {
             applyTOCVisibility();
+            refreshLayoutSoon();
+        }, 80);
+
+        window.addEventListener('resize', function () {
+            onWindowResize();
         });
 
         // Appearance menu
@@ -2433,6 +2140,7 @@ Happy writing in MarkdStudio.
         if (settings.appearance) state.appearance = settings.appearance;
         if (settings.syncScroll !== undefined) state.syncScroll = settings.syncScroll;
         if (settings.sidebarOpen !== undefined) state.sidebarOpen = settings.sidebarOpen;
+        if (settings.splitRatio !== undefined) state.splitRatio = settings.splitRatio;
         if (settings.typography) {
             state.typography = Object.assign(state.typography, settings.typography);
         }
@@ -2527,6 +2235,7 @@ Happy writing in MarkdStudio.
 
         // Setup TOC tracking
         setupTOCTracking();
+        refreshLayoutSoon();
     }
 
     // Start
