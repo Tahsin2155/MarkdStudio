@@ -16,6 +16,7 @@ var MarkdEngine = (function () {
     const ATTRIBUTION_LINE_RE = /^\[Rendered best with MarkdStudio\]\(https:\/\/markdstudio\.netlify\.app\)\s*$/gmi;
     const FOOTNOTE_DEF_RE = /^\[\^([^\]]+)\]:\s*(.+)$/gm;
     const FOOTNOTE_REF_RE = /\[\^([^\]]+)\]/g;
+    const FOOTNOTE_APP_PATH = '/app';
     const DISPLAY_MATH_RE = /\$\$([\s\S]+?)\$\$/g;
     const INLINE_MATH_RE = /(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g;
     const EMOJI_RE = /:([a-z0-9_+-]+):/gi;
@@ -212,7 +213,7 @@ var MarkdEngine = (function () {
 
         var result = withoutDefs.replace(FOOTNOTE_REF_RE, function (match, id) {
             if (footnotes[id]) {
-                return '<sup class="footnote-ref"><a href="#fn-' + escapeHtml(id) + '" id="fnref-' + escapeHtml(id) + '">' + footnotes[id].index + '</a></sup>';
+                return '<sup class="footnote-ref"><a href="' + FOOTNOTE_APP_PATH + '#fn-' + escapeHtml(id) + '" id="fnref-' + escapeHtml(id) + '">' + footnotes[id].index + '</a></sup>';
             }
             return match;
         });
@@ -220,7 +221,7 @@ var MarkdEngine = (function () {
         result += '\n\n<section class="footnotes"><hr><ol>';
         for (var id in footnotes) {
             if (footnotes.hasOwnProperty(id)) {
-                result += '<li id="fn-' + escapeHtml(id) + '"><p>' + escapeHtml(footnotes[id].content) + ' <a href="/app#fnref-' + escapeHtml(id) + '" class="footnote-backref">\u21a9</a></p></li>';
+                result += '<li id="fn-' + escapeHtml(id) + '"><p>' + escapeHtml(footnotes[id].content) + ' <a href="' + FOOTNOTE_APP_PATH + '#fnref-' + escapeHtml(id) + '" class="footnote-backref">\u21a9</a></p></li>';
             }
         }
         result += '</ol></section>';
