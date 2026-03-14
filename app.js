@@ -1742,6 +1742,54 @@ Happy writing in MarkdStudio.
         });
     }
 
+    function setupPreviewAnchorNavigation() {
+        document.addEventListener('click', function (e) {
+            var anchor = e.target && e.target.closest ? e.target.closest('a') : null;
+            if (!anchor) return;
+
+            var inPreview = previewContentEl && previewContentEl.contains(anchor);
+            var inInline = inlineDocEditorEl && inlineDocEditorEl.contains(anchor);
+            if (!inPreview && !inInline) return;
+
+            var href = anchor.getAttribute('href') || '';
+            if (!href) return;
+
+            var resolved;
+            try {
+                resolved = new URL(href, window.location.href);
+            } catch (_) {
+                return;
+            }
+
+            var isSameOrigin = resolved.origin === window.location.origin;
+            var isAppPath = resolved.pathname === '/app' || resolved.pathname === '/app/';
+            if (!isSameOrigin || !isAppPath || !resolved.hash) return;
+
+            var targetId = resolved.hash.slice(1);
+            if (!targetId) return;
+
+            var targetEl = document.getElementById(targetId);
+            if (!targetEl) return;
+
+            e.preventDefault();
+
+            var scrollContainer = inInline ? inlineEditorEl : previewPanelEl;
+            if (!scrollContainer) return;
+
+            var containerRect = scrollContainer.getBoundingClientRect();
+            var targetRect = targetEl.getBoundingClientRect();
+            var targetTop = scrollContainer.scrollTop + (targetRect.top - containerRect.top) - 20;
+            scrollContainer.scrollTo({
+                top: Math.max(0, targetTop),
+                behavior: 'smooth'
+            });
+
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', resolved.pathname + resolved.hash);
+            }
+        });
+    }
+
     // ================================================================
     //  EDITOR GUTTER (Line Numbers)
     // ================================================================
@@ -2217,6 +2265,7 @@ Happy writing in MarkdStudio.
         setupDropdowns();
         setupModals();
         setupCopyButtons();
+        setupPreviewAnchorNavigation();
         setupKeyboardShortcuts();
         setupEditorGutter();
         setupTypography();
