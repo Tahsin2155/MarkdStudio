@@ -971,10 +971,46 @@ input:focus-visible,
     padding-left: 0;
 }
 .markdown-body .task-list-item input[type="checkbox"] {
-    margin-right: 0.5em;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.12em;
+    height: 1.12em;
+    margin-right: 0.55em;
+    border-radius: 0.42em;
+    border: 2px solid var(--preview-link);
+    background: transparent;
     vertical-align: middle;
     position: relative;
-    top: -1px;
+    top: -0.02em;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--preview-link) 32%, transparent);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.markdown-body .task-list-item input[type="checkbox"]::after {
+    content: "";
+    width: 0.3em;
+    height: 0.56em;
+    border: 0.14em solid var(--preview-link);
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg) scale(1);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.markdown-body .task-list-item input[type="checkbox"]:checked {
+    background: transparent;
+    border-color: var(--preview-link);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--preview-link) 32%, transparent);
+}
+.markdown-body .task-list-item input[type="checkbox"]:checked::after {
+    opacity: 1;
+}
+.markdown-body .task-list-item input[type="checkbox"]:disabled {
+    opacity: 1;
+    cursor: default;
 }
 
 /* Blockquotes */
