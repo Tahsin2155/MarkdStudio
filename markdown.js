@@ -220,7 +220,7 @@ var MarkdEngine = (function () {
         result += '\n\n<section class="footnotes"><hr><ol>';
         for (var id in footnotes) {
             if (footnotes.hasOwnProperty(id)) {
-                result += '<li id="fn-' + escapeHtml(id) + '"><p>' + escapeHtml(footnotes[id].content) + ' <a href="#fnref-' + escapeHtml(id) + '" class="footnote-backref">\u21a9</a></p></li>';
+                result += '<li id="fn-' + escapeHtml(id) + '"><p>' + escapeHtml(footnotes[id].content) + ' <a href="/app#fnref-' + escapeHtml(id) + '" class="footnote-backref">\u21a9</a></p></li>';
             }
         }
         result += '</ol></section>';
