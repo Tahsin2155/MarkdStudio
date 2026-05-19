@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" data-appearance="light">
+
 <head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWRWX6HMRB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-YWRWX6HMRB');
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Markdown Guide — MarkdStudio</title>
-  <meta name="description" content="Practical Markdown guide: syntax, KaTeX math, Mermaid diagrams, export tips, keyboard shortcuts, and workflows for writers and developers." />
+  <meta name="description"
+    content="Practical Markdown guide: syntax, KaTeX math, Mermaid diagrams, export tips, keyboard shortcuts, and workflows for writers and developers." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0969da" />
   <link rel="canonical" href="https://markdstudio.netlify.app/guide" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Markdown Guide — MarkdStudio" />
-  <meta property="og:description" content="Learn Markdown syntax, KaTeX math, Mermaid diagrams, export options, and keyboard shortcuts." />
+  <meta property="og:description"
+    content="Learn Markdown syntax, KaTeX math, Mermaid diagrams, export options, and keyboard shortcuts." />
   <meta property="og:url" content="https://markdstudio.netlify.app/guide" />
   <meta property="og:site_name" content="MarkdStudio" />
   <meta property="og:image" content="https://markdstudio.netlify.app/assets/og-image.png" />
@@ -24,10 +38,12 @@
   <meta name="twitter:image:alt" content="MarkdStudio Markdown guide and syntax reference" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
 
   <script type="application/ld+json">
   {
@@ -304,7 +320,8 @@
       margin-bottom: 2rem;
     }
 
-    ul, ol {
+    ul,
+    ol {
       margin-left: 1.5rem;
       margin-bottom: 1.2rem;
     }
@@ -468,6 +485,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+
       *,
       *::before,
       *::after {
@@ -488,6 +506,7 @@
     })();
   </script>
 </head>
+
 <body>
   <!-- NAV -->
   <nav>
@@ -523,133 +542,167 @@
   <div class="container">
     <main>
 
-    <main>
-      <h1>MarkdStudio Markdown Guide</h1>
-      <p class="lead">Complete reference for writing Markdown in MarkdStudio. Covers text formatting, code blocks, math equations, diagrams, tables, footnotes, and export workflows for technical documentation, academic notes, blog posts, and more.</p>
+      <main>
+        <h1>MarkdStudio Markdown Guide</h1>
+        <p class="lead">Complete reference for writing Markdown in MarkdStudio. Covers text formatting, code blocks,
+          math equations, diagrams, tables, footnotes, and export workflows for technical documentation, academic notes,
+          blog posts, and more.</p>
 
-      <div class="note">
-        <strong>New to Markdown?</strong> Markdown is a simple, human-readable format for creating rich documents. It converts to HTML, PDF, and other formats automatically. Start with <strong>headings</strong>, <strong>bold</strong>, and <strong>lists</strong> — then explore advanced features below.
-      </div>
+        <div class="note">
+          <strong>New to Markdown?</strong> Markdown is a simple, human-readable format for creating rich documents. It
+          converts to HTML, PDF, and other formats automatically. Start with <strong>headings</strong>,
+          <strong>bold</strong>, and <strong>lists</strong> — then explore advanced features below.
+        </div>
 
-      <h2 id="table-of-contents">Table of Contents</h2>
-      <ul>
-        <li><a href="#getting-started">Getting Started</a></li>
-        <li><a href="#headings">Headings</a></li>
-        <li><a href="#text-formatting">Text Formatting</a></li>
-        <li><a href="#paragraphs">Paragraphs & Line Breaks</a></li>
-        <li><a href="#lists">Lists & Checklists</a></li>
-        <li><a href="#links-images">Links & Images</a></li>
-        <li><a href="#blockquotes">Blockquotes & Callouts</a></li>
-        <li><a href="#code">Code & Code Blocks</a></li>
-        <li><a href="#tables">Tables</a></li>
-        <li><a href="#math">Math with KaTeX</a></li>
-        <li><a href="#diagrams">Diagrams with Mermaid</a></li>
-        <li><a href="#footnotes">Footnotes</a></li>
-        <li><a href="#emoji">Emojis</a></li>
-        <li><a href="#html">HTML Tags</a></li>
-        <li><a href="#export">Export & Sharing</a></li>
-        <li><a href="#best-practices">Best Practices</a></li>
-      </ul>
+        <h2 id="table-of-contents">Table of Contents</h2>
+        <ul>
+          <li><a href="#getting-started">Getting Started</a></li>
+          <li><a href="#headings">Headings</a></li>
+          <li><a href="#text-formatting">Text Formatting</a></li>
+          <li><a href="#paragraphs">Paragraphs & Line Breaks</a></li>
+          <li><a href="#lists">Lists & Checklists</a></li>
+          <li><a href="#links-images">Links & Images</a></li>
+          <li><a href="#blockquotes">Blockquotes & Callouts</a></li>
+          <li><a href="#code">Code & Code Blocks</a></li>
+          <li><a href="#tables">Tables</a></li>
+          <li><a href="#math">Math with KaTeX</a></li>
+          <li><a href="#diagrams">Diagrams with Mermaid</a></li>
+          <li><a href="#footnotes">Footnotes</a></li>
+          <li><a href="#emoji">Emojis</a></li>
+          <li><a href="#html">HTML Tags</a></li>
+          <li><a href="#export">Export & Sharing</a></li>
+          <li><a href="#best-practices">Best Practices</a></li>
+        </ul>
 
-      <!-- GETTING STARTED -->
-      <h2 id="getting-started">Getting Started</h2>
-      <p>Open <strong>MarkdStudio</strong> and start typing. The preview updates instantly. Your documents are stored locally in your browser—no account or server required. Use the editor on the left, preview on the right, or switch between <strong>write</strong>, <strong>preview</strong>, or <strong>split</strong> modes.</p>
-      <p>Export your work as <strong>PDF</strong>, <strong>HTML</strong>, or <strong>Markdown</strong> at any time. Try the <strong>themes</strong> menu to preview how your document looks in different typographic styles.</p>
+        <!-- GETTING STARTED -->
+        <h2 id="getting-started">Getting Started</h2>
+        <p>Open <strong>MarkdStudio</strong> and start typing. The preview updates instantly. Your documents are stored
+          locally in your browser—no account or server required. Use the editor on the left, preview on the right, or
+          switch between <strong>write</strong>, <strong>preview</strong>, or <strong>split</strong> modes.</p>
+        <p>Export your work as <strong>PDF</strong>, <strong>HTML</strong>, or <strong>Markdown</strong> at any time.
+          Try the <strong>themes</strong> menu to preview how your document looks in different typographic styles.</p>
 
-      <!-- HEADINGS -->
-      <h2 id="headings">Headings</h2>
-      <p>Use `#` symbols to create headings. One `#` for H1 (largest), two for H2, and so on up to H6 (smallest).</p>
-      <pre><code># Heading 1 — Document title
+        <!-- HEADINGS -->
+        <h2 id="headings">Headings</h2>
+        <p>Use `#` symbols to create headings. One `#` for H1 (largest), two for H2, and so on up to H6 (smallest).</p>
+        <pre><code># Heading 1 — Document title
 ## Heading 2 — Major section
 ### Heading 3 — Subsection
 #### Heading 4 — Minor subsection
 ##### Heading 5 — Rarely used
 ###### Heading 6 — Rarely used</code></pre>
-      <div class="note">
-        <strong>Best practice:</strong> Use only one H1 per document. Do not skip heading levels (e.g., don't jump from H2 to H4). This keeps your document structure semantic for accessibility and search engines.
-      </div>
+        <div class="note">
+          <strong>Best practice:</strong> Use only one H1 per document. Do not skip heading levels (e.g., don't jump
+          from H2 to H4). This keeps your document structure semantic for accessibility and search engines.
+        </div>
 
-      <!-- TEXT FORMATTING -->
-      <h2 id="text-formatting">Text Formatting</h2>
-      <p>Make text bold, italic, strikethrough, or inline code using simple markers:</p>
-      <table class="meta-table">
-        <thead>
-          <tr><th>Syntax</th><th>Result</th><th>Example</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>**bold text**</code></td><td><strong>bold text</strong></td><td>Use for emphasis and key terms</td></tr>
-          <tr><td><code>*italic text*</code></td><td><em>italic text</em></td><td>Use for variable names or introductions</td></tr>
-          <tr><td><code>~~strikethrough~~</code></td><td><del>strikethrough</del></td><td>Show deprecated or removed features</td></tr>
-          <tr><td><code>`inline code`</code></td><td><code>inline code</code></td><td>Highlight function names, variable names</td></tr>
-          <tr><td><code>**_bold italic_**</code></td><td><strong><em>bold italic</em></strong></td><td>Combine formatting for emphasis</td></tr>
-        </tbody>
-      </table>
+        <!-- TEXT FORMATTING -->
+        <h2 id="text-formatting">Text Formatting</h2>
+        <p>Make text bold, italic, strikethrough, or inline code using simple markers:</p>
+        <table class="meta-table">
+          <thead>
+            <tr>
+              <th>Syntax</th>
+              <th>Result</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>**bold text**</code></td>
+              <td><strong>bold text</strong></td>
+              <td>Use for emphasis and key terms</td>
+            </tr>
+            <tr>
+              <td><code>*italic text*</code></td>
+              <td><em>italic text</em></td>
+              <td>Use for variable names or introductions</td>
+            </tr>
+            <tr>
+              <td><code>~~strikethrough~~</code></td>
+              <td><del>strikethrough</del></td>
+              <td>Show deprecated or removed features</td>
+            </tr>
+            <tr>
+              <td><code>`inline code`</code></td>
+              <td><code>inline code</code></td>
+              <td>Highlight function names, variable names</td>
+            </tr>
+            <tr>
+              <td><code>**_bold italic_**</code></td>
+              <td><strong><em>bold italic</em></strong></td>
+              <td>Combine formatting for emphasis</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <!-- PARAGRAPHS -->
-      <h2 id="paragraphs">Paragraphs & Line Breaks</h2>
-      <p><strong>Paragraphs:</strong> Separate paragraphs with a blank line.</p>
-      <pre><code>This is the first paragraph.
+        <!-- PARAGRAPHS -->
+        <h2 id="paragraphs">Paragraphs & Line Breaks</h2>
+        <p><strong>Paragraphs:</strong> Separate paragraphs with a blank line.</p>
+        <pre><code>This is the first paragraph.
 
 This is the second paragraph.</code></pre>
-      <p><strong>Line breaks:</strong> End a line with two spaces or a backslash to force a line break within a paragraph:</p>
-      <pre><code>Line one  
+        <p><strong>Line breaks:</strong> End a line with two spaces or a backslash to force a line break within a
+          paragraph:</p>
+        <pre><code>Line one  
 Line two
 
 Or use a backslash:
 Line one\
 Line two</code></pre>
 
-      <!-- LISTS -->
-      <h2 id="lists">Lists & Checklists</h2>
-      <p><strong>Unordered list:</strong> Use `-`, `*`, or `+` for bullet points.</p>
-      <pre><code>- Item one
+        <!-- LISTS -->
+        <h2 id="lists">Lists & Checklists</h2>
+        <p><strong>Unordered list:</strong> Use `-`, `*`, or `+` for bullet points.</p>
+        <pre><code>- Item one
 - Item two
   - Nested item A
   - Nested item B
 - Item three</code></pre>
-      <p><strong>Ordered list:</strong> Use numbers followed by a period.</p>
-      <pre><code>1. First step
+        <p><strong>Ordered list:</strong> Use numbers followed by a period.</p>
+        <pre><code>1. First step
 2. Second step
    1. Sub-step A
    2. Sub-step B
 3. Third step</code></pre>
-      <p><strong>Task list:</strong> Use `[ ]` for unchecked and `[x]` for completed tasks.</p>
-      <pre><code>- [x] Setup project
+        <p><strong>Task list:</strong> Use `[ ]` for unchecked and `[x]` for completed tasks.</p>
+        <pre><code>- [x] Setup project
 - [x] Write documentation
 - [ ] Deploy to production
 - [ ] Monitor metrics</code></pre>
-      <div class="note">
-        <strong>Tip:</strong> Use `-` consistently for unordered lists. Do not mix `-` and `*` in the same list.
-      </div>
+        <div class="note">
+          <strong>Tip:</strong> Use `-` consistently for unordered lists. Do not mix `-` and `*` in the same list.
+        </div>
 
-      <!-- LINKS & IMAGES -->
-      <h2 id="links-images">Links & Images</h2>
-      <p><strong>Inline link:</strong></p>
-      <pre><code>[Link text](https://example.com)
+        <!-- LINKS & IMAGES -->
+        <h2 id="links-images">Links & Images</h2>
+        <p><strong>Inline link:</strong></p>
+        <pre><code>[Link text](https://example.com)
 [Link with tooltip](https://example.com "Hover text")</code></pre>
-      <p><strong>Reference-style link:</strong> Define links once, reference them multiple times.</p>
-      <pre><code>[Click here][ref]
+        <p><strong>Reference-style link:</strong> Define links once, reference them multiple times.</p>
+        <pre><code>[Click here][ref]
 
 [ref]: https://example.com</code></pre>
-      <p><strong>Autolink:</strong> Auto-linkify URLs and emails.</p>
-      <pre><code>&lt;https://example.com&gt;
+        <p><strong>Autolink:</strong> Auto-linkify URLs and emails.</p>
+        <pre><code>&lt;https://example.com&gt;
 &lt;user@example.com&gt;</code></pre>
-      <p><strong>Images:</strong> Similar to links but with a leading `!`.</p>
-      <pre><code>![Alt text](image.png)
+        <p><strong>Images:</strong> Similar to links but with a leading `!`.</p>
+        <pre><code>![Alt text](image.png)
 ![Alt text](https://example.com/image.png "Image title")</code></pre>
-      <div class="note">
-        <strong>Accessibility:</strong> Always include descriptive alt text for images. This helps screen readers and improves SEO.
-      </div>
+        <div class="note">
+          <strong>Accessibility:</strong> Always include descriptive alt text for images. This helps screen readers and
+          improves SEO.
+        </div>
 
-      <!-- BLOCKQUOTES & CALLOUTS -->
-      <h2 id="blockquotes">Blockquotes & Callouts</h2>
-      <p><strong>Blockquote:</strong> Use `&gt;` to create a quoted block.</p>
-      <pre><code>&gt; This is a blockquote.
+        <!-- BLOCKQUOTES & CALLOUTS -->
+        <h2 id="blockquotes">Blockquotes & Callouts</h2>
+        <p><strong>Blockquote:</strong> Use `&gt;` to create a quoted block.</p>
+        <pre><code>&gt; This is a blockquote.
 &gt; It can span multiple lines.
 &gt;
 &gt; And multiple paragraphs.</code></pre>
-      <p><strong>Callouts:</strong> Use `&gt; [!TYPE]` for colored alert boxes.</p>
-      <pre><code>&gt; [!NOTE]
+        <p><strong>Callouts:</strong> Use `&gt; [!TYPE]` for colored alert boxes.</p>
+        <pre><code>&gt; [!NOTE]
 &gt; This is a note. Use for informational content.
 
 &gt; [!TIP]
@@ -661,12 +714,13 @@ Line two</code></pre>
 &gt; [!IMPORTANT]
 &gt; Critical information that must not be ignored.</code></pre>
 
-      <!-- CODE -->
-      <h2 id="code">Code & Code Blocks</h2>
-      <p><strong>Inline code:</strong> Wrap code with backticks.</p>
-      <pre><code>Use the `console.log()` function to debug.</code></pre>
-      <p><strong>Code blocks:</strong> Wrap code with triple backticks. Optionally add a language identifier for syntax highlighting.</p>
-      <pre><code>```js
+        <!-- CODE -->
+        <h2 id="code">Code & Code Blocks</h2>
+        <p><strong>Inline code:</strong> Wrap code with backticks.</p>
+        <pre><code>Use the `console.log()` function to debug.</code></pre>
+        <p><strong>Code blocks:</strong> Wrap code with triple backticks. Optionally add a language identifier for
+          syntax highlighting.</p>
+        <pre><code>```js
 function greet(name) {
   return `Hello, ${name}! :wave:`;
 }
@@ -686,33 +740,35 @@ def fibonacci(n):
   &lt;h1&gt;Hello, World!&lt;/h1&gt;
 &lt;/div&gt;
 ```</code></pre>
-      <p><strong>Supported languages:</strong> javascript, python, css, html, json, sql, bash, markdown, typescript, ruby, php, and many more.</p>
+        <p><strong>Supported languages:</strong> javascript, python, css, html, json, sql, bash, markdown, typescript,
+          ruby, php, and many more.</p>
 
-      <!-- TABLES -->
-      <h2 id="tables">Tables</h2>
-      <p>Create tables with pipes and hyphens:</p>
-      <pre><code>| Header 1 | Header 2 | Header 3 |
+        <!-- TABLES -->
+        <h2 id="tables">Tables</h2>
+        <p>Create tables with pipes and hyphens:</p>
+        <pre><code>| Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
 | Cell A   | Cell B   | Cell C   |
 | Cell D   | Cell E   | Cell F   |</code></pre>
-      <p><strong>Alignment:</strong> Use `:` in the separator row to align columns.</p>
-      <pre><code>| Left    | Center | Right |
+        <p><strong>Alignment:</strong> Use `:` in the separator row to align columns.</p>
+        <pre><code>| Left    | Center | Right |
 | :------ | :----: | ----: |
 | Left    | Center | Right |
 | L       | C      | R     |</code></pre>
-      <p><strong>Use cases:</strong> Compare features, list requirements, document API parameters, or create reference tables.</p>
+        <p><strong>Use cases:</strong> Compare features, list requirements, document API parameters, or create reference
+          tables.</p>
 
-      <!-- MATH -->
-      <h2 id="math">Math with KaTeX</h2>
-      <p>Write mathematical expressions using KaTeX syntax.</p>
-      <p><strong>Inline math:</strong> Wrap with single `$` symbols.</p>
-      <pre><code>Einstein's famous equation is $E = mc^2$, which shows that mass and energy are interchangeable.</code></pre>
-      <p><strong>Display math:</strong> Wrap with double `$$` symbols on separate lines.</p>
-      <pre><code>$$\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$
+        <!-- MATH -->
+        <h2 id="math">Math with KaTeX</h2>
+        <p>Write mathematical expressions using KaTeX syntax.</p>
+        <p><strong>Inline math:</strong> Wrap with single `$` symbols.</p>
+        <pre><code>Einstein's famous equation is $E = mc^2$, which shows that mass and energy are interchangeable.</code></pre>
+        <p><strong>Display math:</strong> Wrap with double `$$` symbols on separate lines.</p>
+        <pre><code>$$\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$
 
 $$\left( \sum_{k=1}^n a_k b_k \right)^2 \le \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$</code></pre>
-      <p><strong>Common examples:</strong></p>
-      <pre><code>- Fractions: $\frac{a}{b}$
+        <p><strong>Common examples:</strong></p>
+        <pre><code>- Fractions: $\frac{a}{b}$
 - Superscript: $x^2 + y^2 = z^2$
 - Square root: $\sqrt{x}$
 - Greek letters: $\alpha, \beta, \gamma, \delta$
@@ -720,11 +776,11 @@ $$\left( \sum_{k=1}^n a_k b_k \right)^2 \le \left( \sum_{k=1}^n a_k^2 \right) \l
 - Summation: $\sum_{i=1}^{n} x_i$
 - Integral: $\int_a^b f(x) \, dx$</code></pre>
 
-      <!-- DIAGRAMS -->
-      <h2 id="diagrams">Diagrams with Mermaid</h2>
-      <p>Create flowcharts, sequence diagrams, and other visualizations using Mermaid syntax.</p>
-      <p><strong>Flowchart:</strong></p>
-      <pre><code>```mermaid
+        <!-- DIAGRAMS -->
+        <h2 id="diagrams">Diagrams with Mermaid</h2>
+        <p>Create flowcharts, sequence diagrams, and other visualizations using Mermaid syntax.</p>
+        <p><strong>Flowchart:</strong></p>
+        <pre><code>```mermaid
 graph TD
   A[Start] --> B{Decision}
   B -->|Yes| C[Action 1]
@@ -732,8 +788,8 @@ graph TD
   C --> E[End]
   D --> E
 ```</code></pre>
-      <p><strong>Sequence diagram:</strong></p>
-      <pre><code>```mermaid
+        <p><strong>Sequence diagram:</strong></p>
+        <pre><code>```mermaid
 sequenceDiagram
   participant User
   participant Server
@@ -741,8 +797,8 @@ sequenceDiagram
   Server->>Server: Process
   Server-->>User: Send response
 ```</code></pre>
-      <p><strong>Gantt chart:</strong></p>
-      <pre><code>```mermaid
+        <p><strong>Gantt chart:</strong></p>
+        <pre><code>```mermaid
 gantt
   title Project Timeline
   section Tasks
@@ -750,90 +806,98 @@ gantt
   Development :dev, after des, 60d
   Testing :test, after dev, 14d
 ```</code></pre>
-      <p><strong>Supported diagram types:</strong> Flowchart, Sequence, Class, State, Entity Relationship (ER), Gantt, Pie, Git, and more. See <a href="https://mermaid.js.org" target="_blank">mermaid.js.org</a> for full documentation.</p>
+        <p><strong>Supported diagram types:</strong> Flowchart, Sequence, Class, State, Entity Relationship (ER), Gantt,
+          Pie, Git, and more. See <a href="https://mermaid.js.org" target="_blank">mermaid.js.org</a> for full
+          documentation.</p>
 
-      <!-- FOOTNOTES -->
-      <h2 id="footnotes">Footnotes</h2>
-      <p>Add footnotes for citations, clarifications, or supplementary information.</p>
-      <pre><code>This is some text with a footnote[^1].
+        <!-- FOOTNOTES -->
+        <h2 id="footnotes">Footnotes</h2>
+        <p>Add footnotes for citations, clarifications, or supplementary information.</p>
+        <pre><code>This is some text with a footnote[^1].
 
 And here's another sentence with another footnote[^note].
 
 [^1]: This is the footnote content.
 [^note]: This is a longer footnote that explains something in detail.</code></pre>
-      <p>Footnotes appear as clickable references in the text and are collected at the bottom of the document in your preview and exports.</p>
+        <p>Footnotes appear as clickable references in the text and are collected at the bottom of the document in your
+          preview and exports.</p>
 
-      <!-- EMOJI -->
-      <h2 id="emoji">Emojis</h2>
-      <p>Use emoji shortcodes (colon-wrapped names) to insert emojis.</p>
-      <pre><code>:smile: :heart: :rocket: :fire: :100:
+        <!-- EMOJI -->
+        <h2 id="emoji">Emojis</h2>
+        <p>Use emoji shortcodes (colon-wrapped names) to insert emojis.</p>
+        <pre><code>:smile: :heart: :rocket: :fire: :100:
 :thumbsup: :thinking: :warning: :bulb: :tada:</code></pre>
-      <p><strong>Common emojis:</strong> `:smile:` 😄, `:heart:` ❤️, `:rocket:` 🚀, `:fire:` 🔥, `:+1:` 👍, `:100:` 💯, `:warning:` ⚠️, `:bulb:` 💡, `:memo:` 📝</p>
-      <p><strong>Use cases:</strong> Highlight key points, add visual interest, express tone (e.g., "Great job :tada:!"), or mark sections.</p>
+        <p><strong>Common emojis:</strong> `:smile:` 😄, `:heart:` ❤️, `:rocket:` 🚀, `:fire:` 🔥, `:+1:` 👍, `:100:`
+          💯, `:warning:` ⚠️, `:bulb:` 💡, `:memo:` 📝</p>
+        <p><strong>Use cases:</strong> Highlight key points, add visual interest, express tone (e.g., "Great job
+          :tada:!"), or mark sections.</p>
 
-      <!-- HTML -->
-      <h2 id="html">HTML Tags</h2>
-      <p>You can also write raw HTML for advanced styling or interactive content:</p>
-      <pre><code>&lt;div style="background: #f0f8ff; padding: 1rem; border-radius: 8px;"&gt;
+        <!-- HTML -->
+        <h2 id="html">HTML Tags</h2>
+        <p>You can also write raw HTML for advanced styling or interactive content:</p>
+        <pre><code>&lt;div style="background: #f0f8ff; padding: 1rem; border-radius: 8px;"&gt;
   &lt;p&gt;This is a custom HTML block.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
-      <p><strong>Note:</strong> For security, MarkdStudio sanitizes HTML to prevent malicious scripts. Basic styling and semantic tags work fine.</p>
+        <p><strong>Note:</strong> For security, MarkdStudio sanitizes HTML to prevent malicious scripts. Basic styling
+          and semantic tags work fine.</p>
 
-      <!-- EXPORT -->
-      <h2 id="export">Export & Sharing</h2>
-      <p><strong>Export formats:</strong></p>
-      <ul>
-        <li><strong>PDF:</strong> Print-ready, styled document. Perfect for reports, resumes, or sharing.</li>
-        <li><strong>HTML:</strong> Standalone HTML file with embedded CSS and images. Great for web publishing.</li>
-        <li><strong>Markdown:</strong> Raw `.md` file. Use to import into other tools or version control.</li>
-      </ul>
-      <p><strong>Themes:</strong> Preview your document in different typographic styles before exporting (GitHub, Blog, Academic, Minimal, Documentation).</p>
-      <p><strong>Tips for exporting:</strong></p>
-      <ul>
-        <li>Use descriptive headings and a clear structure for better readability.</li>
-        <li>Test export with your target format before finalizing.</li>
-        <li>Use the preview pane to see how math, code, and diagrams render.</li>
-        <li>For web publishing, use the HTML export and customize CSS as needed.</li>
-      </ul>
+        <!-- EXPORT -->
+        <h2 id="export">Export & Sharing</h2>
+        <p><strong>Export formats:</strong></p>
+        <ul>
+          <li><strong>PDF:</strong> Print-ready, styled document. Perfect for reports, resumes, or sharing.</li>
+          <li><strong>HTML:</strong> Standalone HTML file with embedded CSS and images. Great for web publishing.</li>
+          <li><strong>Markdown:</strong> Raw `.md` file. Use to import into other tools or version control.</li>
+        </ul>
+        <p><strong>Themes:</strong> Preview your document in different typographic styles before exporting (GitHub,
+          Blog, Academic, Minimal, Documentation).</p>
+        <p><strong>Tips for exporting:</strong></p>
+        <ul>
+          <li>Use descriptive headings and a clear structure for better readability.</li>
+          <li>Test export with your target format before finalizing.</li>
+          <li>Use the preview pane to see how math, code, and diagrams render.</li>
+          <li>For web publishing, use the HTML export and customize CSS as needed.</li>
+        </ul>
 
-      <!-- BEST PRACTICES -->
-      <h2 id="best-practices">Best Practices</h2>
-      <p><strong>Structure and readability:</strong></p>
-      <ul>
-        <li>Start with a clear H1 title.</li>
-        <li>Use consistent heading hierarchy (H1 → H2 → H3, no skipping).</li>
-        <li>Keep paragraphs short (2–4 sentences).</li>
-        <li>Use bullet points for lists instead of long paragraphs.</li>
-      </ul>
-      <p><strong>Code and technical content:</strong></p>
-      <ul>
-        <li>Always include language identifiers for code blocks (```js, ```python, etc.).</li>
-        <li>Use inline code for function names, variables, and file paths.</li>
-        <li>Provide context and examples for complex topics.</li>
-      </ul>
-      <p><strong>Accessibility and SEO:</strong></p>
-      <ul>
-        <li>Always add alt text to images.</li>
-        <li>Use descriptive link text (avoid "click here").</li>
-        <li>Use proper heading structure for screen readers and search engines.</li>
-      </ul>
-      <p><strong>Writing tips:</strong></p>
-      <ul>
-        <li>Keep your tone conversational yet professional.</li>
-        <li>Use callouts ([!NOTE], [!TIP], [!WARNING]) to highlight important information.</li>
-        <li>Add footnotes for citations and supplementary info.</li>
-        <li>Test your exported PDF or HTML to catch rendering issues early.</li>
-      </ul>
+        <!-- BEST PRACTICES -->
+        <h2 id="best-practices">Best Practices</h2>
+        <p><strong>Structure and readability:</strong></p>
+        <ul>
+          <li>Start with a clear H1 title.</li>
+          <li>Use consistent heading hierarchy (H1 → H2 → H3, no skipping).</li>
+          <li>Keep paragraphs short (2–4 sentences).</li>
+          <li>Use bullet points for lists instead of long paragraphs.</li>
+        </ul>
+        <p><strong>Code and technical content:</strong></p>
+        <ul>
+          <li>Always include language identifiers for code blocks (```js, ```python, etc.).</li>
+          <li>Use inline code for function names, variables, and file paths.</li>
+          <li>Provide context and examples for complex topics.</li>
+        </ul>
+        <p><strong>Accessibility and SEO:</strong></p>
+        <ul>
+          <li>Always add alt text to images.</li>
+          <li>Use descriptive link text (avoid "click here").</li>
+          <li>Use proper heading structure for screen readers and search engines.</li>
+        </ul>
+        <p><strong>Writing tips:</strong></p>
+        <ul>
+          <li>Keep your tone conversational yet professional.</li>
+          <li>Use callouts ([!NOTE], [!TIP], [!WARNING]) to highlight important information.</li>
+          <li>Add footnotes for citations and supplementary info.</li>
+          <li>Test your exported PDF or HTML to catch rendering issues early.</li>
+        </ul>
 
-      <div class="note">
-        <strong>Ready to start?</strong> Open the editor and try combining headings, lists, code blocks, and math. MarkdStudio makes it easy to create professional documents with live preview. Happy writing! :sparkles:
-      </div>
+        <div class="note">
+          <strong>Ready to start?</strong> Open the editor and try combining headings, lists, code blocks, and math.
+          MarkdStudio makes it easy to create professional documents with live preview. Happy writing! :sparkles:
+        </div>
 
-      <div class="cta-row">
-        <a href="/app" class="btn">Start Editing (free)</a>
-        <a href="/" class="btn btn-ghost">Back to home</a>
-      </div>
-    </main>
+        <div class="cta-row">
+          <a href="/app" class="btn">Start Editing (free)</a>
+          <a href="/" class="btn btn-ghost">Back to home</a>
+        </div>
+      </main>
   </div>
 
   <script>
@@ -862,7 +926,7 @@ And here's another sentence with another footnote[^note].
       });
       try {
         localStorage.setItem(appearanceStorageKey, mode);
-      } catch (_) {}
+      } catch (_) { }
     }
 
     appearanceButtons.forEach(btn => {
@@ -878,4 +942,5 @@ And here's another sentence with another footnote[^note].
     applyAppearance(getStoredAppearance());
   </script>
 </body>
+
 </html>
