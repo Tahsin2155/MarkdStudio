@@ -1,2 +1,8 @@
+/index.html   /   301
+/   /index.html   200
+/guide.html   /guide   301
+/guide/    /guide   301
+/guide   /guide.html   200
+/app.html     /app     200
 /app/    /app       301
 /app   /app.html   200

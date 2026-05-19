@@ -11,14 +11,14 @@
     <meta name="author" content="MarkdStudio">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#0969da">
-    <link rel="canonical" href="https://markdstudio.netlify.app/app/">
+    <link rel="canonical" href="https://markdstudio.netlify.app/app">
     <meta property="og:type" content="website">
     <meta property="og:title" content="MarkdStudio App - Markdown Editor with Live Preview and Export">
     <meta property="og:description"
         content="Write, preview, and export Markdown with Mermaid, KaTeX, themes, and code editor features.">
-    <meta property="og:url" content="https://markdstudio.netlify.app/app/">
+    <meta property="og:url" content="https://markdstudio.netlify.app/app">
     <meta property="og:site_name" content="MarkdStudio">
-    <meta property="og:image" content="https://markdstudio.netlify.app/og-image.svg">
+    <meta property="og:image" content="https://markdstudio.netlify.app/assets/og-image.png">
     <meta property="og:image:alt" content="MarkdStudio app preview showing markdown editor and live preview panes.">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -26,38 +26,58 @@
     <meta name="twitter:title" content="MarkdStudio App - Markdown Editor with Live Preview and Export">
     <meta name="twitter:description"
         content="A fast Markdown editor app for technical writing and publishing workflows.">
-    <meta name="twitter:image" content="https://markdstudio.netlify.app/og-image.svg">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+    <meta name="twitter:image" content="https://markdstudio.netlify.app/assets/og-image.png">
+    <meta name="twitter:image:alt" content="MarkdStudio app preview showing markdown editor and live preview panes.">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
 
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "WebApplication",
-            "name": "MarkdStudio",
-            "url": "https://markdstudio.netlify.app/app/",
-            "image": "https://markdstudio.netlify.app/og-image.svg",
-            "applicationCategory": "DeveloperApplication",
-            "operatingSystem": "Web",
-            "browserRequirements": "Requires JavaScript. Works in modern Chromium, Firefox, and Safari browsers.",
-            "softwareVersion": "1.0",
-            "description": "A web-based Markdown editor app with live preview, code editor capabilities, Mermaid, KaTeX, and export workflows.",
-            "featureList": [
-                "Live markdown preview",
-                "Mermaid diagram rendering",
-                "KaTeX math rendering",
-                "HTML and PDF export",
-                "Multiple editor modes"
-            ],
-            "brand": {
-                "@type": "Brand",
-                "name": "MarkdStudio"
-            },
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            }
+            "@graph": [
+                {
+                    "@type": "WebApplication",
+                    "@id": "https://markdstudio.netlify.app/app#webapplication",
+                    "name": "MarkdStudio",
+                    "url": "https://markdstudio.netlify.app/app",
+                    "applicationCategory": "DeveloperApplication",
+                    "operatingSystem": "Web",
+                    "browserRequirements": "Requires JavaScript. Works in modern Chromium, Firefox, and Safari browsers.",
+                    "softwareVersion": "1.2.1",
+                    "description": "A web-based Markdown editor app with live preview, code editor capabilities, Mermaid, KaTeX, and export workflows.",
+                    "featureList": [
+                        "Live markdown preview",
+                        "Mermaid diagram rendering",
+                        "KaTeX math rendering",
+                        "HTML and PDF export",
+                        "Multiple editor modes"
+                    ],
+                    "brand": {
+                        "@type": "Brand",
+                        "name": "MarkdStudio"
+                    },
+                    "publisher": {
+                        "@id": "https://markdstudio.netlify.app/#organization"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    },
+                    "isAccessibleForFree": true
+                },
+                {
+                    "@type": "Organization",
+                    "@id": "https://markdstudio.netlify.app/#organization",
+                    "name": "MarkdStudio",
+                    "url": "https://markdstudio.netlify.app/",
+                    "logo": "https://markdstudio.netlify.app/assets/favicon.svg",
+                    "sameAs": [
+                        "https://github.com/Tahsin2155",
+                        "https://tahsin2155.github.io"
+                    ]
+                }
+            ]
         }
     </script>
 
@@ -363,7 +383,7 @@
             <div class="drawer-header">
                 <span>
                     <h3 style="display: inline;">MarkdStudio</h3>
-                    <h6 style="display: inline;">v1.1.6</h6>
+                    <h6 style="display: inline;">v1.2.1</h6>
                 </span>
                 <button id="app-menu-close" class="icon-btn sm" title="Close menu" aria-label="Close menu">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -384,7 +404,7 @@
                         code editor, polished live preview, and export-ready output in one focused workspace.</p>
                     <p>It supports themes, diagrams, math, callouts, rich inline editing, and productivity shortcuts so
                         you can move from draft to publish quickly.</p>
-                    <h5><br><br>v1.1.6</h5>
+                    <h5><br><br>v1.2.1</h5>
                     <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">
                     <h4>Developer</h4>
                     <p style="font-weight:600;margin-bottom:0.25rem;">MD TahsinAli Abtahi</p>
