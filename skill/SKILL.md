@@ -1,5 +1,5 @@
 ---
-name: MarkdStudio Markdown Writing Guide
+name: markdstudio-writing
 description: Teach and enforce correct Markdown formatting for documents, notes, and documentation in MarkdStudio. Use when creating, editing, or formatting markdown files, .md files, README files, documentation, and any structured text content.
 ---
 

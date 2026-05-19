@@ -4,43 +4,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MarkdStudio — Markdown Writing Studio</title>
+  <title>Free Online Markdown Editor with Live Preview — MarkdStudio</title>
   <meta name="description"
-    content="MarkdStudio is a fast, browser-based Markdown editor with live preview, Mermaid diagrams, KaTeX math, and PDF export." />
+    content="Write Markdown with live preview in your browser. Free online editor with KaTeX math, Mermaid diagrams, multiple themes, and PDF export. No signup required." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0969da" />
   <link rel="canonical" href="https://markdstudio.netlify.app/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="MarkdStudio — Markdown Writing Studio" />
+  <meta property="og:title" content="Free Online Markdown Editor with Live Preview" />
   <meta property="og:description"
-    content="A fast Markdown editor with live preview, Mermaid diagrams, KaTeX math, and export options." />
+    content="Write and preview Markdown in your browser instantly. No account or installation needed." />
   <meta property="og:url" content="https://markdstudio.netlify.app/" />
   <meta property="og:site_name" content="MarkdStudio" />
-  <meta property="og:image" content="https://markdstudio.netlify.app/og-image.svg" />
+  <meta property="og:image" content="https://markdstudio.netlify.app/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="MarkdStudio landing page preview" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="MarkdStudio — Markdown Writing Studio" />
-  <meta name="twitter:description" content="Write, preview, and export Markdown in one focused browser workspace." />
-  <meta name="twitter:image" content="https://markdstudio.netlify.app/og-image.svg" />
+  <meta name="twitter:title" content="Free Online Markdown Editor with Live Preview" />
+  <meta name="twitter:description" content="Markdown editor with instant live preview. KaTeX math, Mermaid diagrams, and PDF export built-in." />
+  <meta name="twitter:image" content="https://markdstudio.netlify.app/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="MarkdStudio landing page preview" />
   <meta name="google-site-verification" content="PhWeSXbGbi-1d92-2ZZAIhvofDMopHHzpv3bHEjgwvU" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "MarkdStudio",
-    "url": "https://markdstudio.netlify.app/",
-    "description": "A fast, browser-based Markdown editor with live preview, Mermaid diagrams, KaTeX math, and PDF export.",
-    "potentialAction": {
-      "@type": "ViewAction",
-      "name": "Open App",
-      "target": "https://markdstudio.netlify.app/app/"
-    }
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://markdstudio.netlify.app/#website",
+        "name": "MarkdStudio",
+        "url": "https://markdstudio.netlify.app/",
+        "description": "Free online Markdown editor with live preview, KaTeX math, Mermaid diagrams, and multiple export formats. No signup required.",
+        "potentialAction": {
+          "@type": "ViewAction",
+          "name": "Open App",
+          "target": "https://markdstudio.netlify.app/app"
+        },
+        "publisher": {
+          "@id": "https://markdstudio.netlify.app/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://markdstudio.netlify.app/#organization",
+        "name": "MarkdStudio",
+        "url": "https://markdstudio.netlify.app/",
+        "logo": "https://markdstudio.netlify.app/assets/favicon.svg",
+        "sameAs": [
+          "https://github.com/Tahsin2155",
+          "https://tahsin2155.github.io"
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://markdstudio.netlify.app/#softwareapplication",
+        "name": "MarkdStudio",
+        "url": "https://markdstudio.netlify.app/app",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free online Markdown editor with live preview, KaTeX math, Mermaid diagrams, and multiple export formats.",
+        "featureList": [
+          "Live markdown preview",
+          "Mermaid diagram rendering",
+          "KaTeX math rendering",
+          "HTML and PDF export",
+          "Multiple editor modes"
+        ],
+        "publisher": {
+          "@id": "https://markdstudio.netlify.app/#organization"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://markdstudio.netlify.app/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is MarkdStudio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MarkdStudio is a free online Markdown editor with live preview. It runs entirely in your browser and lets you write and preview Markdown instantly."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it work offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Once loaded, MarkdStudio works offline thanks to browser caching. Your documents are stored locally in IndexedDB, so you can keep writing without an internet connection."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export to PDF or HTML?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. MarkdStudio supports PDF export with configurable margins and paper sizes, standalone HTML export with embedded styles, Markdown download, and an HTML snippet embed option."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is MarkdStudio free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, MarkdStudio is completely free. There is no signup required, no premium tier, and all core features are available to everyone."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1065,6 +1149,52 @@
       line-height: 1.6;
     }
 
+    /* FAQ */
+    .faq-section {
+      padding: 6rem 2rem;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.8rem;
+      margin-top: 3rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .faq-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.4rem;
+    }
+
+    .faq-question {
+      font-weight: 700;
+      font-size: .98rem;
+      color: var(--ink);
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+    }
+
+    .faq-question::before {
+      content: 'Q.';
+      color: var(--blue);
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      font-family: var(--font-body);
+      font-size: .88rem;
+      color: var(--ink-2);
+      line-height: 1.65;
+    }
+
     /* CTA */
     .cta-section {
       background: #1f2328;
@@ -1219,6 +1349,10 @@
         grid-template-columns: 1fr;
       }
 
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
       .af-toc {
         display: none;
       }
@@ -1335,6 +1469,7 @@
         <li><a href="#modes">Modes</a></li>
         <li><a href="#syntax">Syntax</a></li>
         <li><a href="#export">Export</a></li>
+        <li><a href="/guide">Guide</a></li>
       </ul>
       <div class="nav-actions">
         <div class="appearance-sw" role="group" aria-label="Appearance mode">
@@ -1358,14 +1493,14 @@
     <div class="hero-inner">
       <div class="hero-text">
         <div class="label">browser-based · free · no setup</div>
-        <h1 class="hero-title">Your focused<br><span class="accent">Markdown</span><br>writing studio</h1>
+        <h1 class="hero-title">Online <span class="accent">Markdown editor</span><br>with live preview</h1>
+        <p style="font-family: var(--font-body); font-size: 0.95rem; color: var(--ink-2); line-height: 1.6; margin-bottom: 1.2rem; max-width: 50ch;">Edit Markdown in a professional code editor and see your output update instantly. Built-in PDF export, KaTeX equations, Mermaid diagrams, and browser-based storage—no installation required.</p>
         <p class="hero-sub">
-          MarkdStudio combines a professional code editor, polished live preview, and export-ready output in one fast,
-          serverless workspace. KaTeX math, Mermaid diagrams, callouts — all included.
+          MarkdStudio is a free online editor that combines a professional code editor with real-time rendering. Write and preview Markdown instantly with KaTeX math, Mermaid diagrams, and multiple themes — all in your browser.
         </p>
         <div class="hero-actions">
-          <a class="btn-primary" href="/app/">
-            Open MarkdStudio
+          <a class="btn-primary" href="/app">
+            Start Editing Free
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
@@ -1725,6 +1860,34 @@
           <div class="export-card-title">Download Markdown</div>
           <p class="export-card-desc">Save your raw .md file to disk. Also supports Save to Disk via the File System
             Access API on supporting browsers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">questions</div>
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-grid reveal">
+        <div class="faq-item">
+          <div class="faq-question">What is MarkdStudio?</div>
+          <p class="faq-answer">MarkdStudio is a free online Markdown editor with live preview. It runs entirely in your browser—no installation, no account required. Write in the editor and see your formatted output update instantly as you type.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Does it work offline?</div>
+          <p class="faq-answer">Yes. Once loaded, MarkdStudio works offline thanks to browser caching. All your documents are stored locally in IndexedDB, so you can keep writing even without an internet connection.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I export to PDF or HTML?</div>
+          <p class="faq-answer">Absolutely. MarkdStudio supports PDF export with configurable margins and paper sizes, standalone HTML export with embedded styles, Markdown download, and an HTML snippet embed option for websites.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is MarkdStudio free?</div>
+          <p class="faq-answer">Yes, completely free. No premium tier, no hidden fees, no signup required. All features—live preview, export formats, themes, KaTeX math, Mermaid diagrams—are available to everyone.</p>
         </div>
       </div>
     </div>
