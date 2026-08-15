@@ -8,11 +8,34 @@
 	onMount(() => {
 		void workspace.init();
 
-		const handleBeforeUnload = () => {
+		// No single event reliably catches "about to lose the page" across
+		// browsers, so this stacks three, each covering the others' gaps:
+		//  - visibilitychange (hidden): fires on tab switch/backgrounding.
+		//    Best mobile coverage, but Chrome/WebKit have historically been
+		//    inconsistent about firing it during same-tab reload/close.
+		//  - pagehide: fires on navigation/reload/close, including bfcache
+		//    cases where beforeunload/unload don't fire.
+		//  - beforeunload: desktop-navigation coverage, weakest on mobile.
+		// All three call the same async flush — none of them can guarantee
+		// the IndexedDB write finishes before teardown, so this narrows the
+		// loss window rather than closing it with certainty. That's paired
+		// with a short autosave debounce (see workspace store) to keep the
+		// window small regardless of which event actually fires.
+		const flushActive = () => {
 			if (workspace.activeDocId) void workspace.flush(workspace.activeDocId);
 		};
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'hidden') flushActive();
+		};
+
+		window.addEventListener('beforeunload', flushActive);
+		window.addEventListener('pagehide', flushActive);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => {
+			window.removeEventListener('beforeunload', flushActive);
+			window.removeEventListener('pagehide', flushActive);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
 	});
 
 	function handleEditorChange(value: string) {
