@@ -6,6 +6,8 @@ import type { DBSchema } from 'idb';
 export interface DocRecord {
 	id: string; // uuid
 	title: string; // filename shown in the tab, e.g. "untitled.md"
+	titleIsManual: boolean; // true once the user renames the tab by hand —
+	// pins `title` so it stops tracking the document's first H1
 	content: string; // raw markdown source
 	createdAt: number; // epoch ms
 	updatedAt: number; // epoch ms
@@ -35,4 +37,4 @@ export interface MarkdStudioDB extends DBSchema {
 }
 
 export const DB_NAME = 'markdstudio';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;

@@ -1,6 +1,7 @@
 import { SvelteSet } from 'svelte/reactivity';
 import { getAllDocs, getWorkspace, putDoc, putWorkspace, deleteDoc as dbDeleteDoc } from '$lib/db/client';
 import type { DocRecord } from '$lib/db/schema';
+import { extractH1Title } from '$lib/markdown/title';
 
 const AUTOSAVE_DEBOUNCE_MS = 400;
 
@@ -12,7 +13,9 @@ function makeBlankDoc(order: number): DocRecord {
 	const now = Date.now();
 	return {
 		id: uuid(),
-		title: 'untitled.md',
+		title: 'Untitled', // matches the seed content's H1 below, since title
+		// derivation is on by default (titleIsManual: false)
+		titleIsManual: false,
 		content: '# Untitled\n\nStart writing…\n',
 		createdAt: now,
 		updatedAt: now,
@@ -108,7 +111,20 @@ class WorkspaceStore {
 	renameTab(id: string, title: string) {
 		const doc = this.docs.find((d) => d.id === id);
 		if (!doc) return;
-		doc.title = title || 'untitled.md';
+		const trimmed = title.trim();
+		if (trimmed) {
+			// Deliberate override — pin it so future edits stop re-deriving
+			// the title from the H1.
+			doc.title = trimmed;
+			doc.titleIsManual = true;
+		} else {
+			// Blank rename reads as "clear the override," not "pin to
+			// untitled" — otherwise clearing the field would permanently
+			// stick the tab on 'untitled.md' even as the user keeps typing
+			// headings.
+			doc.titleIsManual = false;
+			doc.title = extractH1Title(doc.content) ?? 'untitled.md';
+		}
 		doc.updatedAt = Date.now();
 		this.scheduleSave(id);
 	}
@@ -117,6 +133,9 @@ class WorkspaceStore {
 		const doc = this.docs.find((d) => d.id === id);
 		if (!doc) return;
 		doc.content = content;
+		if (!doc.titleIsManual) {
+			doc.title = extractH1Title(content) ?? 'untitled.md';
+		}
 		doc.updatedAt = Date.now();
 		this.dirty.add(id);
 		this.scheduleSave(id);
