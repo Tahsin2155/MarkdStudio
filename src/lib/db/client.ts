@@ -31,7 +31,20 @@ export async function getDoc(id: string): Promise<DocRecord | undefined> {
 
 export async function putDoc(doc: DocRecord): Promise<void> {
 	const db = await getDB();
-	await db.put('docs', doc);
+	// Callers generally pass a DocRecord pulled out of a Svelte 5 $state
+	// array, which makes `doc` a reactive Proxy, not a plain object.
+	// IndexedDB's put() uses the structured clone algorithm, which cannot
+	// clone a Proxy — it throws "could not be cloned" at runtime. That used
+	// to happen inside a fire-and-forget async timer with nothing awaiting
+	// or catching it, so the error had nowhere to surface and writes
+	// silently no-op'd.
+	//
+	// This file is plain .ts (not .svelte.ts), so Svelte's $state.snapshot
+	// rune isn't compiled here — reaching for it would crash at runtime
+	// with "$state is not defined". A plain JSON round-trip unwraps the
+	// proxy just as well and works in any context; DocRecord is plain
+	// string/number/array data, so it round-trips losslessly.
+	await db.put('docs', JSON.parse(JSON.stringify(doc)));
 }
 
 export async function deleteDoc(id: string): Promise<void> {
