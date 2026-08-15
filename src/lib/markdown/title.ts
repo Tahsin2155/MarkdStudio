@@ -14,8 +14,12 @@
  *   which doesn't exist yet mid-keystroke on the heading line itself.
  * - Must be exactly one `#` (H1), 1–6 leading spaces of indentation allowed
  *   per CommonMark, not inside a fenced code block.
- * - Trailing closing `#`s and inline formatting markers (*_`) are stripped
- *   from the returned text since the tab title is plain text, not markdown.
+ * - Trailing closing `#`s, inline links/images (`[text](url)`,
+ *   `![alt](url)`, reference-style `[text][ref]`), and inline formatting
+ *   markers (`**` `_` `` ` ``) are stripped from the returned text since
+ *   the tab title is plain text, not markdown — a heading like
+ *   `# [My Project](https://x.com)` becomes the title `My Project`, not
+ *   the raw markdown with brackets/url intact.
  * - Returns null if no H1 is found, so callers can fall back to a default.
  */
 export function extractH1Title(source: string): string | null {
@@ -50,6 +54,10 @@ export function extractH1Title(source: string): string | null {
 
 function stripInlineMarkers(text: string): string {
 	return text
+		.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1') // images: keep alt text, drop the ! and url
+		.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // inline links: keep link text, drop the url
+		.replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1') // reference-style links: [text][ref]
+		.replace(/\[([^\]]*)\]/g, '$1') // shortcut reference links: [text] alone
 		.replace(/\*\*(.+?)\*\*/g, '$1')
 		.replace(/__(.+?)__/g, '$1')
 		.replace(/\*(.+?)\*/g, '$1')

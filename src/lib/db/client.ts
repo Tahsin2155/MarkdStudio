@@ -27,6 +27,14 @@ function getDB(): Promise<IDBPDatabase<MarkdStudioDB>> {
 						cursor = await cursor.continue();
 					}
 				}
+				// NOTE for the next schema change: this migration is a
+				// write-time backfill only (walks existing records once, on
+				// upgrade). getAllDocs()/getDoc() below do NOT defensively
+				// default missing fields on read. That's fine as long as
+				// every version bump adds a matching `if (oldVersion < N)`
+				// backfill block here — if one gets skipped, older records
+				// will have `undefined` for that field with nothing to
+				// catch it downstream. Keep both in sync.
 			}
 		});
 	}

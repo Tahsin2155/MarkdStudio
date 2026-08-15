@@ -96,6 +96,17 @@ class WorkspaceStore {
 		this.dirty.delete(id);
 
 		if (this.activeDocId === id) {
+			// `idx` was found in the array BEFORE the filter above, but
+			// `this.docs` here is the array AFTER it — so `this.docs[idx]` is
+			// not "the same slot," it's actually the tab that was one-to-
+			// the-right of the one just closed (everything after idx shifted
+			// down by one). That happens to be the desired UX: closing a tab
+			// focuses whatever's now in its place. The `?? docs[idx - 1]`
+			// only matters when the closed tab was last in the list, where
+			// `docs[idx]` is out of bounds (undefined) and falling back to
+			// the new last tab is correct. Both branches are intentional;
+			// don't re-derive idx after the filter or "simplify" this to
+			// `docs[idx]` alone — the two behaviors depend on each other.
 			const fallback = this.docs[idx] ?? this.docs[idx - 1];
 			this.activeDocId = fallback?.id ?? null;
 		}
