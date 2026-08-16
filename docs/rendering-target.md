@@ -24,9 +24,53 @@ GitHub's own math rendering uses **MathJax** (confirmed via GitHub Docs:
 JavaScript-based display engine"). Delimiters match what's already assumed
 elsewhere: inline `$...$`, block `$$...$$`.
 
-Action: use MathJax for the rebuild, not KaTeX. This was flagged as a v2+
-deferred item in the old roadmap; it's now in-scope for v1, per the new
-landing-page/math decision below.
+**Implemented** via `remark-math` + `rehype-mathjax/chtml`, both from the
+`remarkjs`/`rehypejs` org already anchoring this pipeline.
+
+Output mode is **CHTML**, not `rehype-mathjax`'s default (SVG). Real
+tradeoff, decided deliberately:
+- SVG: ~566kb, fully self-contained, no network dependency per render.
+- CHTML (chosen): ~154kb (confirmed in the actual production client
+  bundle: the mathjax chunk is the single largest chunk, ~293kb
+  unminified / ~95kb gzipped — in the right ballpark), but **requires
+  `fontURL`**, a CDN font URL (jsdelivr's MathJax mirror) fetched at
+  render time.
+- Browser mode (`rehype-mathjax/browser`, ~1kb): rejected — it pushes
+  actual rendering to a separate client-side MathJax pass rather than
+  being pipeline output, abandoning the "math is just more unified
+  output" model this pipeline already uses for alerts/highlighting/etc.
+
+**Accepted tradeoff:** CHTML's CDN font dependency is a genuine, temporary
+regression to this app's "local-only, no signup" pitch (IndexedDB-only,
+no server) — documents with math won't render correctly offline until
+the fonts are cached. **Decided:** accept this now; close the gap later
+via a service worker caching the font requests. PWA/service-worker work
+is already a v2+ item in v2-roadmap.md Phase 4 — this doesn't pull that
+item forward, it just adds "also caches MathJax CHTML fonts" to what that
+future work needs to cover.
+
+**Known gap, not fixed:** GitHub also supports an alternate inline math
+delimiter, `` $`...`$ ``, specifically to avoid ambiguity between math and
+literal dollar signs in prose (GitHub's own docs describe this as the fix
+for exactly that ambiguity). `remark-math` has no equivalent — it follows
+CommonMark's code-span conventions with `$` swapped in for backticks, and
+there's no config option for GitHub's hybrid syntax. Confirmed by direct
+test: prose like "the price is $5 to $10" gets misinterpreted as inline
+math (`5t` and `o` get consumed into a math node), and `` $`...`$ `` is
+left as literal backtick text rather than parsed as math at all. This
+matches a real, known quirk from when GitHub first shipped math support
+(plain-`$` has the same price-text ambiguity there too), so it's not a
+worse mismatch than GitHub's own actual behavior — but GitHub's own
+escape hatch for it isn't implemented here. **Decided:** ship as-is
+(plain `$`/`$$` only) rather than hand-roll a custom remark plugin for
+the backtick variant or disable single-`$` math and diverge from GitHub's
+actual default.
+
+**Confirmed zero-cost when unused:** by reading `rehype-mathjax`'s
+implementation, the stylesheet/font-face block is only appended to the
+tree `if (found)` — i.e. only when the document actually contains math.
+Documents without math pay no rendering cost and inject no MathJax
+markup at all. Verified by direct test.
 
 ## GitHub Alerts (callouts): in scope
 
