@@ -78,21 +78,41 @@
 	// in place). Only loads/runs MathJax when the rendered output actually
 	// contains a MathJax delimiter — most documents have no math at all,
 	// and loading a ~1.8MB script for those would be pure waste.
+	//
+	// Debounced at 400ms (matching the autosave debounce elsewhere in this
+	// app, rather than introducing a new, unrelated timing convention).
+	// Confirmed by direct instrumentation during review that this is
+	// necessary, not just precautionary: MathJax.typesetPromise re-scans
+	// and re-renders the ENTIRE preview element on every call, including
+	// math that hasn't changed since the last typeset — there's no diffing
+	// against what's already rendered. Without debouncing, every keystroke
+	// in a document that contains math re-triggers a full typeset pass
+	// over that document's whole preview, even when the keystroke was
+	// nowhere near any math (confirmed: 14 unrelated keystrokes produced
+	// 14 separate full-preview typeset calls). Debouncing doesn't make
+	// each call scoped or incremental — it still re-typesets everything —
+	// but it collapses the calls during active typing down to one, after
+	// typing actually pauses, instead of one per keystroke.
+	let typesetDebounceTimer: ReturnType<typeof setTimeout> | undefined;
 	$effect(() => {
 		const el = previewEl;
 		const currentHtml = html;
 		if (!el) return;
 		if (!currentHtml.includes('\\(') && !currentHtml.includes('\\[')) return;
 
+		clearTimeout(typesetDebounceTimer);
 		let cancelled = false;
-		loadMathJax()
-			.then(() => window.MathJax?.typesetPromise?.([el]))
-			.catch((err: unknown) => {
-				if (cancelled) return;
-				console.error('MathJax typeset failed:', err);
-			});
+		typesetDebounceTimer = setTimeout(() => {
+			loadMathJax()
+				.then(() => window.MathJax?.typesetPromise?.([el]))
+				.catch((err: unknown) => {
+					if (cancelled) return;
+					console.error('MathJax typeset failed:', err);
+				});
+		}, 400);
 		return () => {
 			cancelled = true;
+			clearTimeout(typesetDebounceTimer);
 		};
 	});
 </script>
