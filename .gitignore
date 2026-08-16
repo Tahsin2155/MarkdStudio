@@ -21,3 +21,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Generated vendor files (copied from node_modules at build/dev-start — see vite.config.ts)
+/static/vendor

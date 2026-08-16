@@ -7,7 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeGithubAlert from 'rehype-github-alert';
 import rehypeSlug from 'rehype-slug';
 import rehypeHighlight from 'rehype-highlight';
-import rehypeMathjaxChtml from 'rehype-mathjax/chtml';
+import rehypeMathjaxBrowser from 'rehype-mathjax/browser';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
 
@@ -95,48 +95,63 @@ const existingCodeClassName = schema.attributes.code?.find(
 	(def) => Array.isArray(def) && def[0] === 'className'
 );
 if (Array.isArray(existingCodeClassName)) {
-	existingCodeClassName.push(/^hljs$/, 'math-inline', 'math-display');
+	existingCodeClassName.push(/^hljs$/);
 } else {
-	schema.attributes.code = [
-		...(schema.attributes.code ?? []),
-		['className', /^hljs$/, 'math-inline', 'math-display']
-	];
+	schema.attributes.code = [...(schema.attributes.code ?? []), ['className', /^hljs$/]];
 }
-// 'math-inline'/'math-display' are what remark-math (via remark-rehype)
-// puts on <code class="language-math ...">; language-math itself already
-// matches the default schema's existing /^language-./ pattern, so only
-// these two extra literal classes needed adding — same merge-into-existing-
-// entry rule as the hljs classes just above, for the same reason.
+// NOTE: no math-inline/math-display className entries here. An earlier
+// version of this file added them for remark-math's intermediate
+// `<code class="language-math ...">` node — needed when rehype-mathjax
+// ran AFTER sanitize (the chtml approach, since abandoned — see the "---
+// Math ---" comment below for why). Under the current rehype-mathjax/
+// browser approach, that intermediate node is consumed and replaced by
+// the mathjax plugin, which runs after sanitize; sanitize itself only
+// ever sees the original language-math code node, which already matches
+// the existing /^language-./ pattern with no extra allowance needed.
+// Confirmed by direct test that math renders identically with or without
+// the math-inline/math-display entries — they'd be dead weight now.
 
-// --- Math: MathJax (CHTML), matching GitHub's own choice of engine ---
+// --- Math: MathJax, matching GitHub's own choice of engine ---
 // See docs/rendering-target.md: GitHub's own docs state their math
 // rendering uses MathJax, not KaTeX (which is what v1 used) — this
 // pipeline follows GitHub's actual engine choice, not v1's.
 //
-// Output mode is CHTML, not the rehype-mathjax default (SVG). Real
-// tradeoff, decided deliberately rather than defaulted into:
-//   - SVG (default): ~566kb, fully self-contained, no network dependency
-//     per render.
-//   - CHTML (chosen): ~154kb, but REQUIRES fontURL — a CDN font URL
-//     fetched at render time. This is a genuine, temporary regression to
-//     this app's "local-only, no signup" pitch (IndexedDB-only, no
-//     server) until a service worker can cache the font requests, which
-//     is a v2+ item, not yet built. Decided to accept this now and close
-//     the gap later via a service worker, rather than pay the SVG
-//     bundle-size cost indefinitely or reintroduce a separate
-//     client-side MathJax pass (rehype-mathjax/browser), which would
-//     abandon the "math is just more unified pipeline output" model the
-//     rest of this file already follows for alerts/highlighting/etc.
-//   - fontURL points at jsdelivr's MathJax CDN mirror, the same one
-//     MathJax's own docs use as the canonical CHTML example.
+// Uses rehype-mathjax/browser, not the package's default (svg) or /chtml
+// export. This was NOT the first choice — chtml was tried first and
+// reached a real dead end, worth recording since it explains why browser
+// mode isn't a lesser fallback here, it's the only mode that actually
+// works in this app's architecture:
 //
-// rehype-mathjax's own readme documents the same untrusted-content
-// ordering rule already applied to rehype-github-alert above: run it
-// AFTER rehype-sanitize when the input isn't trusted. Verified by direct
-// test — sanitize-then-mathjax renders correctly, and the plugin only
-// adds output (mjx-container elements + inline CSS) when the tree
-// actually contains language-math/math-inline/math-display content, so
-// documents with no math pay zero cost per render.
+//   rehype-mathjax's default/svg/chtml exports all wrap `mathjax-full`,
+//   which is fundamentally a NODE-side renderer — it uses a DOM-emulation
+//   layer (liteAdaptor) and a component loader with internal
+//   `require()` calls meant for a real Node process, not a bundler
+//   target. MathJax's own docs are explicit about this: "this technique
+//   is for node-based application only, not for browser applications...
+//   This setup will not work properly in the browser, even if you
+//   webpack it or bundle it in other ways." Confirmed the hard way: with
+//   rehype-mathjax/chtml wired in, `npm run build`/`tsc --noEmit` were
+//   both clean and Node-based smoke tests (via tsx) all passed, but
+//   opening the actual app in a real browser threw
+//   `ReferenceError: require is not defined` inside the bundled
+//   mathjax-full code and the whole page crashed to a blank error
+//   screen. This app renders markdown entirely client-side (Preview.svelte
+//   calls renderMarkdown() directly in a $effect, no server round-trip
+//   for user content), so there is no "build time" this pipeline runs at
+//   other than "in the user's browser, live" — which structurally rules
+//   out chtml/svg/default for this app specifically, independent of the
+//   bundle-size/CDN-font tradeoffs those modes were originally chosen
+//   between.
+//
+// rehype-mathjax/browser (~1kb) sidesteps all of that: per its own
+// source, it does no rendering at all, it just wraps math source text in
+// MathJax's runtime delimiters (`\(...\)` inline, `\[...\]` display) as
+// plain text. Actual typesetting is left to MathJax's real client
+// runtime, loaded and invoked separately — see Preview.svelte, which
+// loads MathJax's browser bundle once and calls
+// `MathJax.typesetPromise()` after each preview update. This is MathJax's
+// own standard client-integration pattern (the same approach any static
+// site embedding MathJax uses), not something improvised for this app.
 //
 // Known gap, not fixed here (see docs/rendering-target.md): GitHub also
 // supports an alternate inline delimiter, $`...`$, specifically to avoid
@@ -155,13 +170,11 @@ if (Array.isArray(existingCodeClassName)) {
 // backtick variant, or disable single-$ math and diverge from GitHub's
 // actual default.
 
-const MATHJAX_FONT_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2';
-
 // Pipeline ordering around rehype-sanitize, worked out (and corrected
 // once) during review — worth documenting precisely since it's easy to
 // get subtly wrong in either direction:
 //
-//   rehypeSlug, rehypeHighlight  ->  rehypeSanitize  ->  rehypeGithubAlert, rehypeMathjaxChtml
+//   rehypeSlug, rehypeHighlight  ->  rehypeSanitize  ->  rehypeGithubAlert, rehypeMathjaxBrowser
 //
 // rehypeSlug and rehypeHighlight run BEFORE sanitize:
 //   - rehypeSlug adds `id` attributes to headings. schema.clobberPrefix
@@ -205,11 +218,12 @@ const MATHJAX_FONT_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtm
 //
 // rehype-mathjax's own readme independently documents the identical
 // ordering rule ("run rehype-mathjax after rehype-sanitize" when content
-// isn't trusted) for the identical reason: its mjx-container output isn't
-// on any allowlist, so letting it run before sanitize would mean either
-// hand-allowing its output shape (same spoofing exposure as alert would
-// have had) or having sanitize strip real math output as an unrecognized
-// element. Running it after sanitize sidesteps both.
+// isn't trusted) for the identical reason: even in /browser mode, its
+// output is a raw `\(...\)`/`\[...\]`-wrapped text node that isn't
+// meaningful HTML on its own — running it before sanitize would offer no
+// benefit and this keeps the same single, consistent rule ("anything
+// that isn't the sanitizer's own baseline HTML runs after it") for every
+// plugin in this pipeline rather than a special case per plugin.
 
 // Single reusable pipeline instance — unified processors are safe to reuse
 // across calls since .process() doesn't mutate shared state per-call.
@@ -228,7 +242,7 @@ const processor = unified()
 	.use(rehypeHighlight) // fenced code block syntax highlighting
 	.use(rehypeSanitize, schema) // security boundary
 	.use(rehypeGithubAlert) // `> [!NOTE]` etc. -> GitHub-style alert divs; trusted output, post-sanitize, unspoofable
-	.use(rehypeMathjaxChtml, { chtml: { fontURL: MATHJAX_FONT_URL } }) // math rendering; same post-sanitize reasoning as alert
+	.use(rehypeMathjaxBrowser) // wraps math source in MathJax's \(...\)/\[...\] delimiters; actual typesetting happens client-side, see Preview.svelte
 	.use(rehypeStringify);
 
 export async function renderMarkdown(source: string): Promise<string> {

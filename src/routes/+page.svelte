@@ -5,8 +5,24 @@
 	import Editor from '$lib/components/Editor.svelte';
 	import Preview from '$lib/components/Preview.svelte';
 
+	let initError = $state<string | null>(null);
+
+	function loadWorkspace() {
+		initError = null;
+		workspace.init().catch((err: unknown) => {
+			// Previously an unguarded `void workspace.init()` — a throw here
+			// (IndexedDB unavailable in private browsing, a corrupted DB, a
+			// blocked upgrade from another open tab, etc.) left `ready` stuck
+			// at false forever with no error surfaced: the app just sat on
+			// "Loading your documents…" indefinitely with nothing telling the
+			// user, or anyone debugging it, what went wrong.
+			initError = err instanceof Error ? err.message : String(err);
+			console.error('Workspace init failed:', err);
+		});
+	}
+
 	onMount(() => {
-		void workspace.init();
+		loadWorkspace();
 
 		// No single event reliably catches "about to lose the page" across
 		// browsers, so this stacks three, each covering the others' gaps:
@@ -50,7 +66,13 @@
 		<span class="brand">MarkdStudio</span>
 	</header>
 
-	{#if workspace.ready}
+	{#if initError}
+		<div class="init-error">
+			<p>Couldn't load your documents.</p>
+			<p class="init-error-detail">{initError}</p>
+			<button onclick={loadWorkspace}>Try again</button>
+		</div>
+	{:else if workspace.ready}
 		<TabBar />
 
 		<main class="workspace">
@@ -113,6 +135,35 @@
 		justify-content: center;
 		flex: 1;
 		color: #6e7781;
+	}
+
+	.init-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		flex: 1;
+		padding: 24px;
+		text-align: center;
+		color: #24292f;
+	}
+
+	.init-error-detail {
+		color: #6e7781;
+		font-size: 13px;
+		font-family: monospace;
+	}
+
+	.init-error button {
+		margin-top: 8px;
+		padding: 6px 16px;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--brand);
+		color: #fff;
+		cursor: pointer;
+		font-size: 14px;
 	}
 
 	@media (max-width: 720px) {

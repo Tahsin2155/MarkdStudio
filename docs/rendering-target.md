@@ -24,30 +24,76 @@ GitHub's own math rendering uses **MathJax** (confirmed via GitHub Docs:
 JavaScript-based display engine"). Delimiters match what's already assumed
 elsewhere: inline `$...$`, block `$$...$$`.
 
-**Implemented** via `remark-math` + `rehype-mathjax/chtml`, both from the
-`remarkjs`/`rehypejs` org already anchoring this pipeline.
+**Implemented** via `remark-math` (delimiter parsing, in the pipeline) +
+`rehype-mathjax/browser` (delimiter-wrapping only, in the pipeline) + a
+real client-side MathJax runtime, loaded and invoked from `Preview.svelte`
+after each render. Both `remark-math` and `rehype-mathjax` are from the
+`remarkjs`/`rehypejs` org already anchoring this pipeline; the client
+runtime is MathJax's own official `mathjax` npm package, using its
+prebuilt `tex-svg.js` browser bundle (TeX input, SVG output).
 
-Output mode is **CHTML**, not `rehype-mathjax`'s default (SVG). Real
-tradeoff, decided deliberately:
-- SVG: ~566kb, fully self-contained, no network dependency per render.
-- CHTML (chosen): ~154kb (confirmed in the actual production client
-  bundle: the mathjax chunk is the single largest chunk, ~293kb
-  unminified / ~95kb gzipped — in the right ballpark), but **requires
-  `fontURL`**, a CDN font URL (jsdelivr's MathJax mirror) fetched at
-  render time.
-- Browser mode (`rehype-mathjax/browser`, ~1kb): rejected — it pushes
-  actual rendering to a separate client-side MathJax pass rather than
-  being pipeline output, abandoning the "math is just more unified
-  output" model this pipeline already uses for alerts/highlighting/etc.
+### Dead end first: rehype-mathjax/chtml doesn't work in this app
 
-**Accepted tradeoff:** CHTML's CDN font dependency is a genuine, temporary
-regression to this app's "local-only, no signup" pitch (IndexedDB-only,
-no server) — documents with math won't render correctly offline until
-the fonts are cached. **Decided:** accept this now; close the gap later
-via a service worker caching the font requests. PWA/service-worker work
-is already a v2+ item in v2-roadmap.md Phase 4 — this doesn't pull that
-item forward, it just adds "also caches MathJax CHTML fonts" to what that
-future work needs to cover.
+The first implementation used `rehype-mathjax/chtml`, reasoning through a
+bundle-size-vs-CDN-font tradeoff between it, `rehype-mathjax`'s SVG
+default, and its `/browser` export (rejected at the time as "abandons the
+pipeline-output model"). That reasoning turned out to rest on a false
+premise, caught only after a real browser reproduced the crash the CHTML
+version actually caused in production:
+
+`rehype-mathjax`'s default/svg/chtml exports all wrap `mathjax-full`,
+which is fundamentally a **Node-side renderer** — MathJax's own docs are
+explicit that its Node integration path "is for node-based application
+only, not for browser applications... This setup will not work properly
+in the browser, even if you webpack it or bundle it in other ways."
+`tsc --noEmit` and `npm run build` were both clean with chtml wired in,
+and Node-based smoke tests (via `tsx`) all passed — none of that caught
+it, because the failure only happens when the bundled code actually runs
+in a browser. Opening the app in a real browser threw
+`ReferenceError: require is not defined` inside the bundled
+`mathjax-full` code and crashed the whole page.
+
+This app renders markdown entirely client-side (`Preview.svelte` calls
+`renderMarkdown()` directly in a `$effect`, no server round-trip for user
+content) — there is no "build time" this pipeline runs at other than "in
+the user's browser, live." That structurally rules out chtml/svg/default
+for this app specifically, independent of whatever bundle-size/CDN-font
+tradeoff they were originally being weighed on.
+
+### What's actually implemented: rehype-mathjax/browser + a real client runtime
+
+`rehype-mathjax/browser` (~1kb) does no rendering at all — per its own
+source, it just wraps math source text in MathJax's runtime delimiters
+(`\(...\)` inline, `\[...\]` display) as plain text. Actual typesetting
+happens via MathJax's real client runtime (`tex-svg.js`), loaded once and
+invoked with `MathJax.typesetPromise()` after each preview update, scoped
+to just the preview container element. This is MathJax's own standard
+client-integration pattern, not something improvised for this app.
+
+`tex-svg.js` is vendored via a small Vite plugin (see `vite.config.ts`)
+that copies it — and its `sre/` companion directory, needed for its
+speech-worker/accessibility subsystem, confirmed by a real browser test
+that omitting it left math rendering working but threw a console error
+on every render — from `node_modules/mathjax` into `static/vendor/` at
+build/dev-server start. Generated, not committed: a multi-megabyte set of
+third-party files doesn't belong in git history, and generating it keeps
+it in sync with whatever `mathjax` version is pinned in `package.json`.
+
+SVG output (not CHTML) — this sidesteps the CDN-font-dependency tradeoff
+entirely rather than accepting it. The original CHTML choice traded
+bundle size for a font CDN dependency; since the real runtime now has to
+be vendored and loaded as a dedicated script regardless of output mode,
+there's no reason left to also accept a CDN dependency on top of that.
+SVG output needs no external fonts at all, which is a strictly better fit
+for this app's local-only pitch than the CHTML approach ever was — no
+"accept now, close the gap with a service worker later" tradeoff needed.
+
+Verified end-to-end with a real headless-browser test (not just Node
+smoke tests, given what the chtml dead end taught): loads with no error,
+typed math renders as genuine MathJax SVG output
+(`<mjx-container jax="SVG">` containing real path data), and the
+speech-worker fix confirmed working via `data-semantic-speech` /
+`data-semantic-braille` attributes actually present in the output.
 
 **Known gap, not fixed:** GitHub also supports an alternate inline math
 delimiter, `` $`...`$ ``, specifically to avoid ambiguity between math and
@@ -66,11 +112,13 @@ escape hatch for it isn't implemented here. **Decided:** ship as-is
 the backtick variant or disable single-`$` math and diverge from GitHub's
 actual default.
 
-**Confirmed zero-cost when unused:** by reading `rehype-mathjax`'s
-implementation, the stylesheet/font-face block is only appended to the
-tree `if (found)` — i.e. only when the document actually contains math.
-Documents without math pay no rendering cost and inject no MathJax
-markup at all. Verified by direct test.
+**Confirmed zero-cost when unused:** `Preview.svelte` only loads the
+MathJax client runtime (~1.8MB, vendored — see above) when the rendered
+HTML actually contains a `\(` or `\[` delimiter; documents without math
+never trigger the script load or any typeset call. Confirmed by reading
+the implementation directly, not assumed from the earlier (now-abandoned)
+CHTML version's equivalent claim, which relied on a different mechanism
+that no longer applies under this architecture.
 
 ## GitHub Alerts (callouts): in scope
 

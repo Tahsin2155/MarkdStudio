@@ -1,44 +1,104 @@
-# sv
+# MarkdStudio
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A lightweight markdown editor and live preview app built with SvelteKit. It focuses on GitHub-flavored markdown rendering, local document storage, and a clean split-pane editing experience.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Live markdown preview
+- GitHub-style markdown rendering, including:
+  - tables
+  - task lists
+  - footnotes
+  - blockquotes
+  - alerts like `> [!NOTE]`
+  - fenced code blocks with syntax highlighting
+  - math via MathJax
+- Offline-style document persistence using IndexedDB
+- Multi-tab document workflow
+- Fast local editing experience without a backend
+- Static hosting friendly
 
-```sh
-# create a new project
-npx sv create my-app
+## Tech stack
+
+- SvelteKit
+- Svelte 5
+- CodeMirror
+- Unified + Remark/Rehype pipeline
+- GitHub markdown CSS
+- MathJax
+- IndexedDB for autosave
+
+## Getting started
+
+### 1) Install dependencies
+
+```bash
+npm install
 ```
 
-To recreate this project with the same configuration:
+### 2) Run the app locally
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --install npm markdstudio-rebuild
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Then open the local URL shown in the terminal, usually:
 
-To create a production version of your app:
+```text
+http://localhost:5173
+```
 
-```sh
+## Available scripts
+
+```bash
+npm run dev
 npm run build
+npm run preview
+npm run check
+npm run check:watch
 ```
 
-You can preview the production build with `npm run preview`.
+### Script meanings
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- `npm run dev` — start the local dev server
+- `npm run build` — create a production build
+- `npm run preview` — preview the production build locally
+- `npm run check` — run Svelte type checking
+- `npm run check:watch` — watch mode for type checking
 
-<!-- push test: 2026-08-15T04:31:04Z -->
+## Project structure
+
+```text
+.
+├── src/
+│   ├── app.css
+│   ├── app.d.ts
+│   ├── app.html
+│   ├── lib/
+│   │   ├── components/
+│   │   ├── db/
+│   │   ├── editor/
+│   │   ├── markdown/
+│   │   └── stores/
+│   └── routes/
+├── static/
+├── docs/
+├── assets/
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+├── netlify.toml
+├── vercel.json
+├── robots.txt
+├── sitemap.xml
+└── README.md
+```
+
+## Notes on rendering
+
+The markdown renderer is intentionally tuned to match GitHub’s real output more closely than a generic CommonMark/GFM baseline. This includes GitHub-style alert callouts and GitHub-like sanitization behavior.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+

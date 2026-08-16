@@ -1,9 +1,46 @@
 import adapter from '@sveltejs/adapter-netlify';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
+import { cp, mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+
+// Copies MathJax's prebuilt browser bundle (tex-svg.js — a plain
+// self-executing script, not an ES module, so it can't just be `import`ed
+// and bundled normally; see Preview.svelte for how it's loaded) from
+// node_modules into static/vendor/ so SvelteKit serves it verbatim.
+// Also copies the sre/ directory alongside it: tex-svg.js loads a speech-
+// worker script from a path relative to itself at runtime, for
+// accessibility (screen-reader math descriptions) — confirmed by a real
+// browser test that omitting sre/ leaves math rendering itself working,
+// but throws a console error on every render as that fetch 404s. Copied
+// as a whole directory since tex-svg.js resolves these paths internally
+// and the exact subset of files it needs isn't documented anywhere worth
+// trusting over just mirroring the real layout.
+//
+// Generated at build/dev-start time rather than committed to the repo,
+// same reasoning as node_modules itself being gitignored: a multi-
+// megabyte set of third-party files doesn't belong in git history, and
+// copying it here keeps it automatically in sync with whatever version
+// `mathjax` is pinned to in package.json, rather than risking a manually-
+// copied file silently going stale after a dependency bump.
+function copyMathJaxVendorFiles(): Plugin {
+	const copy = async () => {
+		const root = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
+		const destDir = root('./static/vendor');
+		await mkdir(destDir, { recursive: true });
+		await cp(root('./node_modules/mathjax/tex-svg.js'), root('./static/vendor/mathjax-tex-svg.js'));
+		await cp(root('./node_modules/mathjax/sre'), root('./static/vendor/sre'), { recursive: true });
+	};
+	return {
+		name: 'copy-mathjax-vendor-files',
+		buildStart: copy,
+		configureServer: copy
+	};
+}
 
 export default defineConfig({
 	plugins: [
+		copyMathJaxVendorFiles(),
 		sveltekit({
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
