@@ -61,9 +61,19 @@
 	}
 </script>
 
+<svelte:head>
+	<title>MarkdStudio App — Free Online Markdown Editor</title>
+	<meta
+		name="description"
+		content="Write and preview Markdown that renders exactly like GitHub — alerts, tables, task lists, and MathJax equations. Multi-tab documents, autosaved locally in your browser. No signup."
+	/>
+	<link rel="canonical" href="https://markdstudio.netlify.app/app" />
+	<meta name="robots" content="index, follow" />
+</svelte:head>
+
 <div class="app-shell">
 	<header class="app-header">
-		<span class="brand">MarkdStudio</span>
+		<a class="brand" href="/">MarkdStudio</a>
 	</header>
 
 	{#if initError}
@@ -111,6 +121,7 @@
 		font-weight: 600;
 		color: var(--brand);
 		font-size: 15px;
+		text-decoration: none;
 	}
 
 	.workspace {
