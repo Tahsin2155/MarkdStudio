@@ -17,12 +17,22 @@ import { fileURLToPath } from 'node:url';
 // and the exact subset of files it needs isn't documented anywhere worth
 // trusting over just mirroring the real layout.
 //
+// Also copies the two DARK theme-dependent stylesheets (github-markdown-
+// css dark, highlight.js github-dark) into the same static/vendor/
+// directory. These need to be plain, independently-fetchable CSS files
+// rather than Vite-bundled `import`s because dark mode is loaded on
+// demand only for users who need it (see app.html's blocking script and
+// +layout.svelte's theme $effect) — the light variants stay as regular
+// bundled `import`s in +layout.svelte since they're needed for every
+// visitor regardless of theme.
+//
 // Generated at build/dev-start time rather than committed to the repo,
 // same reasoning as node_modules itself being gitignored: a multi-
 // megabyte set of third-party files doesn't belong in git history, and
 // copying it here keeps it automatically in sync with whatever version
-// `mathjax` is pinned to in package.json, rather than risking a manually-
-// copied file silently going stale after a dependency bump.
+// `mathjax`/`github-markdown-css`/`highlight.js` are pinned to in
+// package.json, rather than risking a manually-copied file silently
+// going stale after a dependency bump.
 function copyMathJaxVendorFiles(): Plugin {
 	const copy = async () => {
 		const root = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
@@ -30,6 +40,15 @@ function copyMathJaxVendorFiles(): Plugin {
 		await mkdir(destDir, { recursive: true });
 		await cp(root('./node_modules/mathjax/tex-svg.js'), root('./static/vendor/mathjax-tex-svg.js'));
 		await cp(root('./node_modules/mathjax/sre'), root('./static/vendor/sre'), { recursive: true });
+
+		await cp(
+			root('./node_modules/github-markdown-css/github-markdown-dark.css'),
+			root('./static/vendor/github-markdown-dark.css')
+		);
+		await cp(
+			root('./node_modules/highlight.js/styles/github-dark.css'),
+			root('./static/vendor/hljs-github-dark.css')
+		);
 	};
 	return {
 		name: 'copy-mathjax-vendor-files',

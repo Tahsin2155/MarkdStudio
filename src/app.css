@@ -2,8 +2,39 @@
 	--brand: #0969da;
 	--border: #d0d7de;
 	--bg-muted: #f6f8fa;
+	--bg: #ffffff;
 	--fg: #1f2328;
+	--fg-muted: #57606a;
 	color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+	--brand: #4493f8;
+	--border: #3d444d;
+	--bg-muted: #151b23;
+	--bg: #0d1117;
+	--fg: #f0f6fc;
+	--fg-muted: #9198a1;
+	color-scheme: dark;
+}
+
+/* Printing a dark background wastes ink/toner and reads worse on paper
+   than the light GitHub-style theme this render pipeline is built to
+   match — printed output should look like a printed GitHub page
+   regardless of the screen theme the user had active. This has to
+   override the dark block above specifically for @media print, since
+   data-theme="dark" is still set on <html> when printing (nothing clears
+   it — printing doesn't change the user's stored preference). */
+@media print {
+	:root[data-theme='dark'] {
+		--brand: #0969da;
+		--border: #d0d7de;
+		--bg-muted: #f6f8fa;
+		--bg: #ffffff;
+		--fg: #1f2328;
+		--fg-muted: #57606a;
+		color-scheme: light;
+	}
 }
 
 * {
@@ -25,6 +56,10 @@ body {
 		Arial,
 		sans-serif;
 	color: var(--fg);
+	background: var(--bg);
+	transition:
+		background-color 0.15s ease,
+		color 0.15s ease;
 }
 
 #svelte {

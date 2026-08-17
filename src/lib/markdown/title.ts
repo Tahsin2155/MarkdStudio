@@ -65,3 +65,29 @@ function stripInlineMarkers(text: string): string {
 		.replace(/`(.+?)`/g, '$1')
 		.trim();
 }
+
+/**
+ * Turns a document's display title (H1-derived or manually renamed —
+ * either way, arbitrary free text, not filesystem-safe by construction)
+ * into a safe `.md` filename for export.
+ *
+ * Deliberately doesn't just reuse extractH1Title's output verbatim:
+ * that function guarantees plain *text* (markdown syntax stripped), but
+ * plain text can still contain `/`, `:`, `?`, etc., all of which are
+ * either invalid or awkward across Windows/macOS/Linux filesystems. This
+ * is a second, narrower pass specifically for the filesystem-safety
+ * property, not a duplicate of the markdown-stripping one.
+ */
+export function titleToFilename(title: string): string {
+	const cleaned = title
+		.trim()
+		// Strips control characters (0x00-0x1F, 0x7F) — invalid in
+		// filenames on Windows, awkward/invisible elsewhere.
+		.replace(/[\x00-\x1f\x7f]/g, '')
+		.replace(/[/\\:*?"<>|]/g, '-') // reserved on Windows; also just risky to shell out to elsewhere
+		.replace(/\s+/g, ' ')
+		.trim();
+
+	const base = cleaned.length > 0 ? cleaned : 'untitled';
+	return base.toLowerCase().endsWith('.md') ? base : `${base}.md`;
+}

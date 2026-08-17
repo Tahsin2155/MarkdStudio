@@ -79,6 +79,45 @@ class WorkspaceStore {
 		await this.persistWorkspace();
 	}
 
+	/**
+	 * Creates a new tab from imported file content, rather than routing
+	 * through newTab() + updateContent(): newTab() seeds blank starter
+	 * content ("# Untitled\n\nStart writing…\n") specifically so a brand
+	 * new tab has an H1 to derive its title from — that seed content would
+	 * need to be immediately overwritten here anyway, and doing so via a
+	 * separate updateContent() call would mean two IndexedDB writes and two
+	 * autosave-timer schedules for what's conceptually one action. Writes
+	 * the real imported content directly, once, and awaits that write
+	 * before returning — same shape as newTab(), though for a different
+	 * reason: newTab() awaits specifically to close a delete/re-add race
+	 * with closeTab() (see that method's comments), which doesn't apply
+	 * here since importDoc only ever adds a doc, never removes one. The
+	 * await here is just the ordinary "don't resolve until persisted"
+	 * guarantee every other mutating method in this store already gives
+	 * its caller.
+	 */
+	async importDoc(content: string, suggestedTitle: string) {
+		const now = Date.now();
+		const h1Title = extractH1Title(content);
+		const doc: DocRecord = {
+			id: uuid(),
+			title: h1Title ?? suggestedTitle,
+			// Only pin manually if there's no H1 to derive from — an imported
+			// file with a real H1 should behave exactly like a document typed
+			// directly into the app (title tracks the H1 as it's edited), not
+			// silently get pinned just because it arrived via import.
+			titleIsManual: h1Title === null,
+			content,
+			createdAt: now,
+			updatedAt: now,
+			order: this.docs.length
+		};
+		this.docs = [...this.docs, doc];
+		this.activeDocId = doc.id;
+		await putDoc(doc);
+		await this.persistWorkspace();
+	}
+
 	async closeTab(id: string) {
 		const idx = this.docs.findIndex((d) => d.id === id);
 		if (idx === -1) return;

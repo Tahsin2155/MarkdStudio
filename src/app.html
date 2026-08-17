@@ -4,7 +4,80 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<script>
+			// Runs before first paint, before hydration — sets data-theme on
+			// <html> synchronously so CSS custom-property overrides (see
+			// app.css's `:root[data-theme='dark']` block) apply immediately.
+			// Doing this as a Svelte $effect instead (in +layout.svelte,
+			// alongside the theme store it'd otherwise belong with) would
+			// only run after hydration, meaning a page load in a stored/OS
+			// dark preference would paint light first, then flash to dark
+			// once JS catches up.
+			//
+			// Deliberately ONLY sets the attribute here — does not also
+			// inject the dark stylesheets, despite that being the more
+			// obvious place to do it right alongside this. See the second
+			// script below, after %sveltekit.head%, for why that part has to
+			// run later: attribute selectors like the one above aren't
+			// order-sensitive, but the dark <link> stylesheets ARE (same
+			// `.markdown-body` selector, same specificity as the light
+			// variant — whichever lands later in the DOM wins the cascade).
+			// This script runs before %sveltekit.head% has been parsed into
+			// the DOM at all, so anything appended to <head> here would
+			// insert BEFORE the light styles that placeholder injects, not
+			// after — the reverse of the required order. Caught by directly
+			// inspecting the raw served HTML, not assumed: confirmed the
+			// bundled light <style data-sveltekit> tag textually follows
+			// this script in the actual output.
+			//
+			// Storage key/logic intentionally mirrors theme.svelte.ts's
+			// readStoredPreference() — duplicated because this has to run
+			// standalone, before any module import machinery exists yet.
+			(function () {
+				var stored = localStorage.getItem('markdstudio-theme');
+				var theme =
+					stored === 'light' || stored === 'dark'
+						? stored
+						: window.matchMedia('(prefers-color-scheme: dark)').matches
+							? 'dark'
+							: 'light';
+				document.documentElement.setAttribute('data-theme', theme);
+			})();
+		</script>
 		%sveltekit.head%
+		<script>
+			// Second half of the before-first-paint theme setup — see the
+			// script above %sveltekit.head% for why this is split into two
+			// and why THIS half specifically has to run after that
+			// placeholder: by this point in parsing, the bundled light
+			// `.markdown-body`/highlight.js <style>/<link> tags (from
+			// +layout.svelte's static imports) already exist in the DOM, so
+			// appending the dark stylesheets now means they land after
+			// light in source order and correctly win the cascade on
+			// otherwise-identical selector specificity.
+			//
+			// Only injects the DARK stylesheets, and only when needed — the
+			// light variants are the ones bundled above, already present
+			// with no extra request for the common case. Dark is
+			// deliberately NOT bundled the same way (that would ship both
+			// themes' CSS to every visitor); it's fetched here as a real
+			// stylesheet only for users who actually need it.
+			(function () {
+				if (document.documentElement.getAttribute('data-theme') !== 'dark') return;
+
+				var markdownLink = document.createElement('link');
+				markdownLink.rel = 'stylesheet';
+				markdownLink.id = 'markdown-theme-dark-css';
+				markdownLink.href = '/vendor/github-markdown-dark.css';
+				document.head.appendChild(markdownLink);
+
+				var hljsLink = document.createElement('link');
+				hljsLink.rel = 'stylesheet';
+				hljsLink.id = 'hljs-theme-dark-css';
+				hljsLink.href = '/vendor/hljs-github-dark.css';
+				document.head.appendChild(hljsLink);
+			})();
+		</script>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

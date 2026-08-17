@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -140,6 +141,7 @@
 			<a href="https://github.com/Tahsin2155/MarkdStudio" target="_blank" rel="noreferrer">GitHub</a>
 		</nav>
 		<a class="nav-cta" href="/app">Open the editor</a>
+		<ThemeToggle />
 	</header>
 
 	<section class="hero">
