@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-netlify';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, type Plugin } from 'vite';
-import { cp, mkdir } from 'node:fs/promises';
+import { cp, mkdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 // Copies MathJax's prebuilt browser bundle (tex-svg.js — a plain
@@ -34,21 +34,51 @@ import { fileURLToPath } from 'node:url';
 // package.json, rather than risking a manually-copied file silently
 // going stale after a dependency bump.
 function copyMathJaxVendorFiles(): Plugin {
-	const copy = async () => {
-		const root = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
-		const destDir = root('./static/vendor');
-		await mkdir(destDir, { recursive: true });
-		await cp(root('./node_modules/mathjax/tex-svg.js'), root('./static/vendor/mathjax-tex-svg.js'));
-		await cp(root('./node_modules/mathjax/sre'), root('./static/vendor/sre'), { recursive: true });
+	// Guards against two copy() calls racing against the same destination
+	// files at once — this plugin runs the copy on BOTH buildStart and
+	// configureServer, and a fast dev-server restart (or, as happened
+	// during development, two dev-server processes briefly overlapping)
+	// can trigger both around the same time. Node's fs.cp with
+	// recursive:true does an unlink-then-write (or chmod) per file when
+	// the destination already has content; if a second copy starts before
+	// the first finishes, they can both try to unlink/chmod the same file
+	// and one loses with an ENOENT — confirmed by directly reproducing
+	// this exact failure (see the two "chmod .../nemeth.json" /
+	// "unlink .../sv.json" ENOENT crashes this fix addresses). Clearing
+	// the destination directory before copying (rather than copying over
+	// whatever's already there) also avoids the race's root cause rather
+	// than just serializing around it: fs.cp only hits the unlink/chmod
+	// path when overwriting an existing file, so copying into a directory
+	// that's guaranteed empty never takes that path in the first place.
+	let inFlight: Promise<void> | null = null;
 
-		await cp(
-			root('./node_modules/github-markdown-css/github-markdown-dark.css'),
-			root('./static/vendor/github-markdown-dark.css')
-		);
-		await cp(
-			root('./node_modules/highlight.js/styles/github-dark.css'),
-			root('./static/vendor/hljs-github-dark.css')
-		);
+	const copy = async () => {
+		if (inFlight) {
+			await inFlight;
+			return;
+		}
+		inFlight = (async () => {
+			const root = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
+			const destDir = root('./static/vendor');
+			await rm(destDir, { recursive: true, force: true });
+			await mkdir(destDir, { recursive: true });
+			await cp(root('./node_modules/mathjax/tex-svg.js'), root('./static/vendor/mathjax-tex-svg.js'));
+			await cp(root('./node_modules/mathjax/sre'), root('./static/vendor/sre'), { recursive: true });
+
+			await cp(
+				root('./node_modules/github-markdown-css/github-markdown-dark.css'),
+				root('./static/vendor/github-markdown-dark.css')
+			);
+			await cp(
+				root('./node_modules/highlight.js/styles/github-dark.css'),
+				root('./static/vendor/hljs-github-dark.css')
+			);
+		})();
+		try {
+			await inFlight;
+		} finally {
+			inFlight = null;
+		}
 	};
 	return {
 		name: 'copy-mathjax-vendor-files',
