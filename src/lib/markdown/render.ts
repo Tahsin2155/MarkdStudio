@@ -10,6 +10,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeMathjaxBrowser from 'rehype-mathjax/browser';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
+import { rehypeMermaidPlaceholder } from './rehype-mermaid-placeholder';
 
 // --- Rendering target: match github.com's actual output, not generic GFM ---
 // See docs/rendering-target.md for the full decision writeup. In short:
@@ -174,7 +175,7 @@ if (Array.isArray(existingCodeClassName)) {
 // once) during review — worth documenting precisely since it's easy to
 // get subtly wrong in either direction:
 //
-//   rehypeSlug, rehypeHighlight  ->  rehypeSanitize  ->  rehypeGithubAlert, rehypeMathjaxBrowser
+//   rehypeSlug, rehypeHighlight  ->  rehypeSanitize  ->  rehypeGithubAlert, rehypeMathjaxBrowser, rehypeMermaidPlaceholder
 //
 // rehypeSlug and rehypeHighlight run BEFORE sanitize:
 //   - rehypeSlug adds `id` attributes to headings. schema.clobberPrefix
@@ -224,6 +225,13 @@ if (Array.isArray(existingCodeClassName)) {
 // benefit and this keeps the same single, consistent rule ("anything
 // that isn't the sanitizer's own baseline HTML runs after it") for every
 // plugin in this pipeline rather than a special case per plugin.
+//
+// rehypeMermaidPlaceholder follows the same rule for the same reason — see
+// rehype-mermaid-placeholder.ts's own header comment for the full writeup.
+// It runs last in this after-sanitize group (order among alert/mathjax/
+// mermaid doesn't matter to each other — each only touches its own node
+// shapes, `div.markdown-alert*` / math-delimited text / `pre>code.language-
+// mermaid`, with no overlap).
 
 // Single reusable pipeline instance — unified processors are safe to reuse
 // across calls since .process() doesn't mutate shared state per-call.
@@ -243,6 +251,7 @@ const processor = unified()
 	.use(rehypeSanitize, schema) // security boundary
 	.use(rehypeGithubAlert) // `> [!NOTE]` etc. -> GitHub-style alert divs; trusted output, post-sanitize, unspoofable
 	.use(rehypeMathjaxBrowser) // wraps math source in MathJax's \(...\)/\[...\] delimiters; actual typesetting happens client-side, see Preview.svelte
+	.use(rehypeMermaidPlaceholder) // ```mermaid``` fences -> placeholder divs; actual typesetting happens client-side, see Preview.svelte
 	.use(rehypeStringify);
 
 export async function renderMarkdown(source: string): Promise<string> {
