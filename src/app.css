@@ -5,6 +5,9 @@
 	--bg: #ffffff;
 	--fg: #1f2328;
 	--fg-muted: #57606a;
+	--error-bg: #fff1f0;
+	--error-fg: #82071e;
+	--error-border: #d1242f;
 	color-scheme: light;
 }
 
@@ -15,6 +18,22 @@
 	--bg: #0d1117;
 	--fg: #f0f6fc;
 	--fg-muted: #9198a1;
+	/* --error-fg and --error-border are confirmed GitHub/Primer dark-theme
+	   red-scale tokens (#ffa198, #da3633), same sourcing as the other dark
+	   values above. --error-bg (#2d1214) is a reasonable extrapolation in
+	   the same spirit — a dark, desaturated tint of that red scale — but
+	   wasn't independently confirmed against a primary Primer source the
+	   way the other two were; worth a second look if exact fidelity to
+	   GitHub's actual danger-background token matters here. Fixes a gap
+	   that predates this session: Preview.svelte's render-error banner
+	   (and this session's new import-error banner in /app) both
+	   hardcoded the light-only #fff1f0/#82071e/#d1242f combination, which
+	   would show washed-out/wrong against a dark background — the same
+	   category of bug as the hero-preview-body contrast issue this
+	   session's dark-mode work initially missed. */
+	--error-bg: #2d1214;
+	--error-fg: #ffa198;
+	--error-border: #da3633;
 	color-scheme: dark;
 }
 
@@ -33,6 +52,9 @@
 		--bg: #ffffff;
 		--fg: #1f2328;
 		--fg-muted: #57606a;
+		--error-bg: #fff1f0;
+		--error-fg: #82071e;
+		--error-border: #d1242f;
 		color-scheme: light;
 	}
 }

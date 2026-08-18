@@ -334,7 +334,7 @@
 		align-items: center;
 		justify-content: center;
 		flex: 1;
-		color: #6e7781;
+		color: var(--fg-muted);
 	}
 
 	.import-error {
@@ -343,10 +343,10 @@
 		justify-content: space-between;
 		gap: 12px;
 		padding: 8px 16px;
-		background: #fff1f0;
-		color: #82071e;
+		background: var(--error-bg);
+		color: var(--error-fg);
 		font-size: 13px;
-		border-bottom: 1px solid #d1242f;
+		border-bottom: 1px solid var(--error-border);
 		flex-shrink: 0;
 	}
 
@@ -369,11 +369,11 @@
 		flex: 1;
 		padding: 24px;
 		text-align: center;
-		color: #24292f;
+		color: var(--fg);
 	}
 
 	.init-error-detail {
-		color: #6e7781;
+		color: var(--fg-muted);
 		font-size: 13px;
 		font-family: monospace;
 	}

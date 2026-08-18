@@ -84,8 +84,8 @@
 	.tab-bar {
 		display: flex;
 		align-items: stretch;
-		background: #f6f8fa;
-		border-bottom: 1px solid #d0d7de;
+		background: var(--bg-muted);
+		border-bottom: 1px solid var(--border);
 		overflow-x: auto;
 		flex-shrink: 0;
 	}
@@ -96,19 +96,19 @@
 		gap: 8px;
 		padding: 8px 10px 8px 14px;
 		border: none;
-		border-right: 1px solid #d0d7de;
+		border-right: 1px solid var(--border);
 		background: transparent;
 		font-size: 13px;
-		color: #57606a;
+		color: var(--fg-muted);
 		cursor: pointer;
 		white-space: nowrap;
 		max-width: 200px;
 	}
 
 	.tab.active {
-		background: #ffffff;
-		color: #1f2328;
-		box-shadow: inset 0 -2px 0 #0969da;
+		background: var(--bg);
+		color: var(--fg);
+		box-shadow: inset 0 -2px 0 var(--brand);
 	}
 
 	.tab-title {
@@ -120,17 +120,19 @@
 	.rename-input {
 		font: inherit;
 		font-size: 13px;
-		border: 1px solid #0969da;
+		border: 1px solid var(--brand);
 		border-radius: 3px;
 		padding: 1px 4px;
 		width: 120px;
+		background: var(--bg);
+		color: var(--fg);
 	}
 
 	.dirty-dot {
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background: #0969da;
+		background: var(--brand);
 		flex-shrink: 0;
 	}
 
@@ -138,7 +140,7 @@
 		font: inherit;
 		font-size: 15px;
 		line-height: 1;
-		color: #8b949e;
+		color: var(--fg-muted);
 		padding: 2px 4px;
 		border: none;
 		background: transparent;
@@ -147,8 +149,8 @@
 	}
 
 	.close-btn:hover {
-		background: #d0d7de;
-		color: #1f2328;
+		background: var(--border);
+		color: var(--fg);
 	}
 
 	.new-tab-btn {
@@ -156,12 +158,12 @@
 		background: transparent;
 		width: 36px;
 		font-size: 16px;
-		color: #57606a;
+		color: var(--fg-muted);
 		cursor: pointer;
 		flex-shrink: 0;
 	}
 
 	.new-tab-btn:hover {
-		background: #eaeef2;
+		background: var(--bg-muted);
 	}
 </style>

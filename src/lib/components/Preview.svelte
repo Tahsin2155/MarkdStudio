@@ -135,10 +135,10 @@
 	.render-error {
 		margin-bottom: 16px;
 		padding: 8px 12px;
-		border: 1px solid #d1242f;
+		border: 1px solid var(--error-border);
 		border-radius: 6px;
-		background: #fff1f0;
-		color: #82071e;
+		background: var(--error-bg);
+		color: var(--error-fg);
 		font-size: 13px;
 	}
 </style>

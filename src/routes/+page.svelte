@@ -237,7 +237,7 @@
 
 	.nav-links a {
 		font-size: 14px;
-		color: #57606a;
+		color: var(--fg-muted);
 		text-decoration: none;
 	}
 
@@ -291,7 +291,7 @@
 	.hero-sub {
 		font-size: 18px;
 		line-height: 1.6;
-		color: #57606a;
+		color: var(--fg-muted);
 		max-width: 560px;
 		margin: 0 auto 32px;
 	}
@@ -354,7 +354,7 @@
 	.hero-preview-filename {
 		margin-left: 10px;
 		font-size: 12px;
-		color: #6e7781;
+		color: var(--fg-muted);
 		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 	}
 
@@ -362,11 +362,21 @@
 		width: 10px;
 		height: 10px;
 		border-radius: 50%;
-		background: #d0d7de;
+		background: var(--border);
 	}
 
 	.hero-preview-body {
-		background: #ffffff;
+		/* No background set here deliberately — .markdown-body (from
+		   github-markdown-light.css / github-markdown-dark.css, swapped by
+		   theme, see +layout.svelte) already sets its own background-color
+		   matching the active theme. A hardcoded background here competed
+		   with that at equal CSS specificity, and depending on which
+		   stylesheet happened to load later in source order, could leave
+		   this box with dark theme's light text sitting on this rule's
+		   hardcoded white background — exactly the bug reported: alert
+		   text, checkboxes, and math effectively invisible in dark mode.
+		   Letting markdown-body own the background entirely removes the
+		   conflict rather than trying to win it. */
 		padding: 20px 24px;
 		font-size: 14px;
 	}
@@ -384,7 +394,7 @@
 	}
 
 	.section-sub {
-		color: #57606a;
+		color: var(--fg-muted);
 		font-size: 15px;
 		margin: 0 0 40px;
 	}
@@ -405,7 +415,7 @@
 	.feature p {
 		font-size: 15px;
 		line-height: 1.6;
-		color: #57606a;
+		color: var(--fg-muted);
 		margin: 0;
 	}
 
@@ -464,7 +474,7 @@
 		margin: 10px 0 2px 16px;
 		font-size: 14px;
 		line-height: 1.6;
-		color: #57606a;
+		color: var(--fg-muted);
 	}
 
 	.closing {
@@ -484,11 +494,11 @@
 		padding: 24px 0 40px;
 		border-top: 1px solid var(--border);
 		font-size: 13px;
-		color: #6e7781;
+		color: var(--fg-muted);
 	}
 
 	.footer a {
-		color: #6e7781;
+		color: var(--fg-muted);
 	}
 
 	@media (max-width: 640px) {
