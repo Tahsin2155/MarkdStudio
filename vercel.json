@@ -1,12 +1,36 @@
 {
   "redirects": [
     {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/guide.html",
+      "destination": "/guide",
+      "permanent": true
+    },
+    {
+      "source": "/guide/",
+      "destination": "/guide",
+      "permanent": true
+    },
+    {
+      "source": "/app.html",
+      "destination": "/app",
+      "permanent": true
+    },
+    {
       "source": "/app/",
       "destination": "/app",
       "permanent": true
     }
   ],
   "rewrites": [
+    {
+      "source": "/guide",
+      "destination": "/guide.html"
+    },
     {
       "source": "/app",
       "destination": "/app.html"

@@ -113,7 +113,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
 
     <!-- App Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
@@ -418,7 +418,7 @@
                     <h5><br><br>v1.2.1</h5>
                     <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;">
                     <h4>Developer</h4>
-                    <p style="font-weight:600;margin-bottom:0.25rem;">MD TahsinAli Abtahi</p>
+                    <p style="font-weight:600;margin-bottom:0.25rem;">Tahsin Ali Abtahi</p>
                     <!-- <p style="font-size:0.85rem;opacity:0.8;margin-bottom:0.75rem;">11th-grade student &amp; aspiring developer. Started with Minecraft redstone, ended up writing Python. Hackathon veteran (Zonal level, top 120 nationally).</p> -->
                     <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.85rem;">
                         <a href="https://tahsin2155.github.io" target="_blank" rel="noopener noreferrer"
@@ -427,8 +427,16 @@
                             style="color:var(--ui-accent);">🐙 GitHub</a>
                         <a href="https://www.instagram.com/tahsin_2155" target="_blank" rel="noopener noreferrer"
                             style="color:var(--ui-accent);">📸 @tahsin_2155</a>
-                        <a href="mailto:tahsindlg@gmail.com" style="color:var(--ui-accent);">✉️ Mail</a>
                     </div>
+                    <form class="contact-form" action="https://formspree.io/f/moeawbeg" method="POST">
+                        <label for="contact-name">Your name</label>
+                        <input id="contact-name" type="text" name="name" autocomplete="name" required>
+                        <label for="contact-email">Your email</label>
+                        <input id="contact-email" type="email" name="email" autocomplete="email" required>
+                        <label for="contact-message">Your message</label>
+                        <textarea id="contact-message" name="message" rows="4" required></textarea>
+                        <button type="submit">Send message</button>
+                    </form>
                 </section>
                 <section class="drawer-page" data-page="shortcuts">
                     <h4>Keyboard Shortcuts</h4>
